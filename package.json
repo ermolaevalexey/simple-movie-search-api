@@ -1,0 +1,22 @@
+{
+  "name": "simple-movie-search-api",
+  "version": "0.0.1",
+  "description": "A simple movie search API for angular course",
+  "main": "index.ts",
+  "scripts": {
+    "start": "ts-node index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "koa": "2.11.0",
+    "koa-router": "7.4.0",
+    "ts-node": "8.4.1",
+    "typescript": "3.7.2"
+  },
+  "devDependencies": {
+    "@types/koa": "2.0.51",
+    "@types/node": "12.12.6"
+  }
+}
