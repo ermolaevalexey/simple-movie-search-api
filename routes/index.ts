@@ -3,5 +3,5 @@ import { getMovies } from "./get-movies";
 
 const router = new Router();
 
-router.get(getMovies().path, getMovies().handler);
+router.register(getMovies.path, getMovies.methods, getMovies.handler);
 export default router;
