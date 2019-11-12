@@ -4,7 +4,7 @@
   "description": "A simple movie search API for angular course",
   "main": "index.ts",
   "scripts": {
-    "start": "nodemon ./node_modules/.bin/ts-node index.ts",
+    "start": "nodemon",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

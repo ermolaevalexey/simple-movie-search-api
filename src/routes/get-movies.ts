@@ -5,7 +5,7 @@ export const getMovies: RouteModel = {
     path: '/movies',
     methods: ['GET'],
     handler: (ctx, next) => {
-        ctx.headers['Content-Type'] = 'application/json';
+        ctx.headers['Content-Type'] = 'application/json; charset=UTF-8';
         ctx.body = JSON.stringify([{
             title: 'Kill Bill',
             year: '2003',

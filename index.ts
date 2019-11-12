@@ -1,5 +1,5 @@
 import * as Koa from 'koa';
-import router from "./routes";
+import router from "./src/routes";
 
 const app: Koa = new Koa();
 
