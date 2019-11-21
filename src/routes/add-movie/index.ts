@@ -12,6 +12,7 @@ export default {
             400,
             JSON.stringify({ message: 'Wrong movie params!' })
         );
+        ctx.headers['Content-Type'] = 'application/json; charset=UTF-8';
         ctx.status = 201;
         ctx.body = params;
         ctx.toJSON();

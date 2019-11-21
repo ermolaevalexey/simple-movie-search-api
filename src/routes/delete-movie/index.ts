@@ -11,6 +11,7 @@ export default {
             404,
             JSON.stringify({ message: `No movie with such id: ${ctx.params.id}` })
         );
+        ctx.headers['Content-Type'] = 'application/json; charset=UTF-8';
         ctx.status = 200;
         ctx.body = {
             title: 'Kill Bill',
