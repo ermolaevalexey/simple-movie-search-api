@@ -1,7 +1,7 @@
-import * as Router from '@koa/router';
-import { getMovies } from "./get-movies";
+import routeRegistry from './route-registry';
+import getMovies from './get-movies';
+import addMovie from './add-movie';
 
-const router = new Router();
-
-router.register(getMovies.path, getMovies.methods, getMovies.handler);
-export default router;
+routeRegistry.registerRoute(getMovies);
+routeRegistry.registerRoute(addMovie);
+export default routeRegistry.routes;

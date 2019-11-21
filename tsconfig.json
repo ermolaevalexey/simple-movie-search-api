@@ -1,5 +1,7 @@
 {
-    "compilerOptions": {
-      "typeRoots" : ["./node_modules/@types", "./types"]
-    }
+  "compilerOptions": {
+    "target": "es2017",
+    "moduleResolution": "node",
+    "typeRoots" : ["./node_modules/@types", "./types"]
+  }
 }
