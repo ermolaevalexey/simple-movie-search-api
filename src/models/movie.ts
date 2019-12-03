@@ -1,7 +1,7 @@
 import * as S from 'sequelize';
 import { DataTypes, Model, Op } from 'sequelize';
-import db from "../config/db";
-import { MovieDirectorModel } from "./director";
+import db from '../db';
+import { MovieDirectorModel } from './director';
 
 
 export interface Movie {
