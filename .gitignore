@@ -1,4 +1,6 @@
 .vscode
 .idea
+.env
+*.hcl
 dist
 node_modules
