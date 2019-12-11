@@ -3,7 +3,7 @@ import * as KoaRouter from '@koa/router';
 import { RouteModel } from "../../models/router";
 
 
-class RouteRegistry {
+export class RouteRegistry {
     private router: KoaRouter = new KoaRouter();
 
     registerRoute(model: RouteModel): void {
