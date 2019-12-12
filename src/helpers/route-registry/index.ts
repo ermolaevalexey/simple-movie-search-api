@@ -1,6 +1,6 @@
 import * as Koa from 'koa';
 import * as KoaRouter from '@koa/router';
-import { RouteModel } from "../../models/router";
+import { RouteModel } from '../../models/router';
 
 
 export class RouteRegistry {

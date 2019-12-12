@@ -11,7 +11,7 @@ export abstract class Repository<T extends Model> {
     public abstract async getItem(): Promise<any>;
 }
 
-export abstract class Route {
+export abstract class Controller {
     constructor(
         protected repository: Repository<any>,
     ) {}
