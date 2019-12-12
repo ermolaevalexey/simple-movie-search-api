@@ -42,22 +42,3 @@ export class MovieModel extends Model {
         }
     }
 }
-
-MovieModel.init({
-    id: {
-        type: DataTypes.UUIDV4.key,
-        primaryKey: true
-    },
-    title: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    year: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    description: DataTypes.STRING,
-    director: DataTypes.UUIDV4
-}, { sequelize: db, tableName: 'movies', timestamps: false })
-
-MovieModel.belongsTo(MovieDirectorModel, { foreignKey: 'director' });

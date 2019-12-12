@@ -1,30 +1,21 @@
 import * as Router from '@koa/router';
-import { Model } from 'sequelize';
+import { Sequelize, Model } from 'sequelize';
 
 
 export abstract class Repository<T extends Model> {
     constructor(
-        private store: T
+        protected store: Sequelize
     )  {}
 
-    public async getAll() {}
-    public async getItem() {}
+    public abstract async getAll(): Promise<any>;
+    public abstract async getItem(): Promise<any>;
 }
 
 export abstract class Route {
-    private path!: string;
-    private method!: 'get' | 'post' | 'put' | 'delete';
-    private handler!: () => Promise<any>;
-
     constructor(
-        private repository: Repository<any>,
-        private router: Router
+        protected repository: Repository<any>,
     ) {}
 
-    get route(): Router {
-        return this.router[this.method](
-            this.path,
-            this.handler
-        );
-    }
+    public abstract get router(): Router;
 }
+

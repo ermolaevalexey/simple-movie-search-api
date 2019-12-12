@@ -11,7 +11,7 @@ export class AppContainer {
 
     constructor(
         private routeRegistry: RouteRegistry,
-        private store: Sequelize
+        private _store: Sequelize
     ) {}
 
     registerService<T extends Route | Repository<any>>(name: string, callback: (c: AppContainer) => T): AppContainer {
@@ -37,5 +37,9 @@ export class AppContainer {
 
     private applyMiddleware(server: Koa): Koa {
         return server.use(koaBodyParser);
+    }
+
+    get store(): Sequelize {
+        return this._store;
     }
 }
