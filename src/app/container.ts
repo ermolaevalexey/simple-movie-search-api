@@ -1,7 +1,6 @@
 import * as Koa from 'koa';
 import * as koaBodyParser from 'koa-bodyparser';
 import { Sequelize } from 'sequelize';
-import { RouteRegistry } from '../helpers/route-registry';
 import { Controller, Repository } from '../providers/types';
 
 

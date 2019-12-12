@@ -12,7 +12,7 @@ export class MoviesController extends Controller {
         protected repository: MoviesRepository
     ) {
         super(repository);
-        this._router.register('/movies', ['GET'], this.getMovies);
+        this._router.get('/movies', this.getMovies);
     }
 
     getMovies = async (ctx: Koa.Context, next: Function) => {
