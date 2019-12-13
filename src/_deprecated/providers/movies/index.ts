@@ -1,4 +1,4 @@
-import { AppContainer } from '../../app/_container';
+import { AppContainer } from '../../../app/_container';
 import { MoviesController } from './controller';
 import { MoviesRepository } from './repository';
 

@@ -10,9 +10,10 @@ import { Injector } from './src/core/di';
 // })();
 function bootstrap() {
     const injector = new Injector();
-    const entryPoint = injector.resolve(App);
+    const entryPoint = injector.resolve<App>(App);
     console.log(entryPoint);
-    (entryPoint as App).logSrv();
+    entryPoint.logSrv();
+    entryPoint.run();
 }
 
 bootstrap();
