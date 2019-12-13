@@ -1,9 +1,7 @@
 import * as Koa from 'koa';
 import * as koaBodyParser from 'koa-bodyparser';
 import { Sequelize } from 'sequelize';
-import { Service } from '../core/di';
-import { Container } from '../core/di/container';
-import { Controller as _Controller, Repository } from '../_deprecated/providers/types';
+import { Controller as _Controller, Repository } from '../providers/types';
 
 
 // @Container()

@@ -47,17 +47,3 @@ export class App {
             .listen(3000);
     }
 }
-
-
-// import * as Koa from 'koa';
-// import db from '../db';
-// import { AppContainer } from './_container';
-// import moviesProvider from '../providers/movies';
-//
-//
-// export default (): AppContainer => {
-//     const container = new AppContainer(db, new Koa());
-//     moviesProvider(container);
-//
-//     return container;
-// };
