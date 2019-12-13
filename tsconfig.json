@@ -5,6 +5,10 @@
     "moduleResolution": "node",
     "typeRoots" : ["./node_modules/@types", "./types"],
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "paths": {
+      "@core/*": ["src/app/core/*"],
+      "@core/di": ["src/app/core/di"]
+    }
   }
 }
