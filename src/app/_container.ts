@@ -1,18 +1,21 @@
 import * as Koa from 'koa';
 import * as koaBodyParser from 'koa-bodyparser';
 import { Sequelize } from 'sequelize';
-import { Controller, Repository } from '../providers/types';
+import { Service } from '../core/di';
+import { Container } from '../core/di/container';
+import { Controller as _Controller, Repository } from '../providers/types';
 
 
+// @Container()
 export class AppContainer {
-    private server: Koa = new Koa();
-    private services: Record<string, Controller | Repository<any>> = {};
+    private services: Record<string, _Controller | Repository<any>> = {};
 
     constructor(
-        private _store: Sequelize
+        private _store: Sequelize,
+        private server: Koa
     ) {}
 
-    registerService<T extends Controller | Repository<any>>(name: string, callback: (c: AppContainer) => T): AppContainer {
+    registerService<T extends _Controller | Repository<any>>(name: string, callback: (c: AppContainer) => T): AppContainer {
         Object.defineProperty(this, name, {
             get: () => {
                 if (!this.services.hasOwnProperty(name)) {
