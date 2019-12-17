@@ -14,9 +14,23 @@ export class InjectionRegisterError extends Error {
     }
 }
 
+export interface RegistryProvider {
+    token: any;
+    _class?: Constructor;
+    _value?: any;
+    injections?: any[];
+}
+
+export class RegistryItem {
+    public token: any;
+    public value: any;
+    public instance: any;
+    public injections!: any[];
+}
+
 export class Container {
 
-    private registry: Map<any, any> = new Map();
+    private registry: Map<any, RegistryItem | any> = new Map();
 
     constructor() {
         // this.register({
@@ -25,25 +39,79 @@ export class Container {
         // });
     }
 
-    register(cls: Constructor): void {
-        if (!this.isInjectable(cls)) {
-            throw new InjectionRegisterError(cls.name);
+    register(registration: RegistryProvider | Array<RegistryProvider>): void {
+        if (Array.isArray(registration)) {
+            this.registerAll(registration);
+        } else {
+            this.registerItem(registration)
         }
-
-        this.registry.set(cls.name, cls);
     }
 
+    registerAll(registration: Array<RegistryProvider>): void {
+        registration.forEach(provider => this.registerItem(provider));
+    }
 
-    resolve<T>(token: Constructor): T {
-        const cls = this.registry.get(token.name);
-        const injections = Reflect.getMetadata(INJECTIONS_KEY, cls) || [];
-        const resolved = injections.map((token: Constructor) => {
-            return this.resolve(token);
+    registerItem(registration: RegistryProvider): void {
+        const { token, _class, _value, injections } = registration;
+        const isClass = !!_class;
+
+        if (isClass && !this.isInjectable(_class!)) {
+            throw new InjectionRegisterError(_class!.name);
+        }
+
+        const registryItem = new RegistryItem();
+        const tokens: any[] = injections || [];
+
+        registryItem.token = token;
+        registryItem.value = _class || _value;
+        const injs = Reflect.getMetadata(INJECTIONS_KEY, _class!);
+        registryItem.injections = isClass
+            ? (injs || []).map((inj: any, idx: any) => ({
+                token: inj,
+                paramIdx: idx
+            }))
+            : tokens.map((t, idx) => ({
+                token: t,
+                paramIdx: idx
+            }));
+
+        this.registry.set(token, registryItem);
+    }
+
+    resolve<T>(token: any): T {
+        const regItem = this.registry.get(token);
+
+        if (!!regItem.instance) {
+            return regItem.instance;
+        }
+
+        const isClass = this.isClass(regItem.value);
+        const params: any[] = [];
+        const injections = regItem.injections || [];
+        const resolved = injections.map((i: any) => this.resolve(i.token));
+
+        injections.forEach((i: any, idx: number) => {
+            params[i.paramIdx] = resolved[idx];
         });
-        return new cls(...resolved);
+
+        if (isClass) {
+            return new regItem.value(...params);
+        }
+
+        return regItem.value(...params);
     }
 
     private isInjectable(cls: Constructor): boolean {
         return !!Reflect.getMetadata(INJECTABLE_KEY, cls);
+    }
+
+    private isClass(token: any): boolean {
+        try {
+            Reflect.construct(String, [], token);
+        } catch (err) {
+            return false;
+        }
+
+        return true;
     }
 }

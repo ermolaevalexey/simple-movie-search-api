@@ -35,7 +35,6 @@ export class AppContainer {
     }
 
     private applyMiddleware(server: Koa): Koa {
-        console.log(this.services);
         server
             .use(koaBodyParser())
             // @ts-ignore

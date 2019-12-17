@@ -2,6 +2,9 @@ import './src/config/env';
 import { Container } from './src/core/di';
 import { Inject, Injectable } from './src/core/di';
 
+const TService = Symbol.for('Service');
+const TFoo = Symbol.for('Foo');
+
 @Injectable()
 class Foo {
     foo = 'foo';
@@ -9,7 +12,7 @@ class Foo {
 
 @Injectable()
 class Service {
-    constructor(@Inject(Foo) public foo: Foo) {
+    constructor(@Inject(TFoo) public foo: Foo) {
         this.method();
     }
 
@@ -21,10 +24,19 @@ class Service {
 
 function bootstrap() {
     const container = new Container();
-    container.register(Foo);
-    container.register(Service);
 
-    container.resolve(Service);
+    container.register([
+        {
+            token: TFoo,
+            _class: Foo
+        },
+        {
+            token: TService,
+            _class: Service
+        }
+    ]);
+
+    container.resolve(TService);
 
 }
 
