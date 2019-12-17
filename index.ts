@@ -1,21 +1,31 @@
-// import createContainer from './src/app';
 import './src/config/env';
-import { App } from './src/app';
-import { Injector } from './src/core/di';
-// console.log(process.env);
-//
-// (async () => {
-//     createContainer()
-//         .runServer(parseInt(process.env.APP_PORT as string, 10));
-// })();
+import { Container } from './src/core/di';
+import { Inject, Injectable } from './src/core/di';
+
+@Injectable()
+class Foo {
+    foo = 'foo';
+}
+
+@Injectable()
+class Service {
+    constructor(@Inject(Foo) public foo: Foo) {
+        this.method();
+    }
+
+    method() {
+        console.log(this.foo.foo);
+    }
+}
+
+
 function bootstrap() {
-    const injector = new Injector();
-    const entryPoint = injector.resolve<App>(App);
-    // console.log(entryPoint);
-    entryPoint.logSrv();
-    entryPoint.run();
+    const container = new Container();
+    container.register(Foo);
+    container.register(Service);
+
+    container.resolve(Service);
+
 }
 
 bootstrap();
-// const app = new App();
-// console.log(app);
