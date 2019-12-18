@@ -25,11 +25,9 @@ class SomeData {
 
 @Injectable()
 class Service {
-    constructor(@Inject(TSomeData) private someData: SomeData) {
-        this.method();
-    }
+    constructor(@Inject(TSomeData) private someData: SomeData) {}
 
-    method() {
+    run() {
         console.log(this.someData.getAll());
         console.log(this.someData.getItem(4));
     }
@@ -54,8 +52,8 @@ function bootstrap() {
         }
     ]);
 
-    container.resolve(TService);
-
+    const app: Service = container.resolve(TService);
+    app.run();
 }
 
 bootstrap();
