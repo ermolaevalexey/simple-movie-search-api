@@ -5,6 +5,8 @@ import { Container } from './src/core/di';
 import { LifeTime } from './src/core/di/container';
 import { AppProvider, TAppProvider } from './src/providers/app';
 import { StoreProvider, TStoreProvider } from './src/providers/db';
+import { MoviesController } from './src/providers/movies/controller';
+import { MoviesRepository } from './src/providers/movies/repository';
 
 
 function bootstrap() {
@@ -30,6 +32,16 @@ function bootstrap() {
             token: TAppProvider,
             _class: AppProvider,
             lifeTime: LifeTime.Persistent
+        },
+        {
+            token: 'MoviesRepository',
+            _class: MoviesRepository,
+            lifeTime: LifeTime.PerRequest
+        },
+        {
+            token: 'MoviesController',
+            _class: MoviesController,
+            lifeTime: LifeTime.PerRequest
         }
     ]);
 

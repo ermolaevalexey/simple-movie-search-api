@@ -1,5 +1,6 @@
 import * as S from 'sequelize';
 import { Model, Op } from 'sequelize';
+import { Injectable } from '../core/di';
 import { MovieDirectorModel } from './director';
 
 
@@ -11,6 +12,7 @@ export interface Movie {
     posterImage?: string;
 }
 
+@Injectable()
 export class MovieModel extends Model {
     public id!: string;
     public title!: string;
