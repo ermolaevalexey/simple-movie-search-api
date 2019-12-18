@@ -4,20 +4,34 @@ import { Inject, Injectable } from './src/core/di';
 
 const TService = Symbol.for('Service');
 const TFoo = Symbol.for('Foo');
-
+const TSomeData = Symbol.for('SomeData');
 @Injectable()
 class Foo {
     foo = 'foo';
 }
 
 @Injectable()
+class SomeData {
+    private data = [1, 2, 3, 4, 5];
+
+    getItem(index: number): number {
+        return this.data[index] || this.data[0];
+    };
+
+    getAll(): Array<number> {
+        return this.data;
+    };
+}
+
+@Injectable()
 class Service {
-    constructor(@Inject(TFoo) public foo: Foo) {
+    constructor(@Inject(TSomeData) private someData: SomeData) {
         this.method();
     }
 
     method() {
-        console.log(this.foo.foo);
+        console.log(this.someData.getAll());
+        console.log(this.someData.getItem(4));
     }
 }
 
@@ -29,6 +43,10 @@ function bootstrap() {
         {
             token: TFoo,
             _class: Foo
+        },
+        {
+            token: TSomeData,
+            _class: SomeData
         },
         {
             token: TService,
