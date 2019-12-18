@@ -1,6 +1,6 @@
 import * as S from 'sequelize';
 import { DataTypes, Model, Op } from 'sequelize';
-import db from '../../db';
+import db from '../../providers/db';
 import { MovieDirectorModel } from './director';
 
 

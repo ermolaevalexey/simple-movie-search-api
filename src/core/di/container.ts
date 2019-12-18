@@ -13,12 +13,17 @@ export class InjectionRegisterError extends Error {
             Dependency ${className} is not injectable!`;
     }
 }
-
+export enum LifeTime {
+    Persistent,
+    PerRequest
+}
 export interface RegistryProvider {
     token: any;
     _class?: Constructor;
     _value?: any;
+    _factory?: (...args: any[]) => any;
     injections?: any[];
+    lifeTime?: LifeTime;
 }
 
 export class RegistryItem {
@@ -26,6 +31,7 @@ export class RegistryItem {
     public value: any;
     public instance: any;
     public injections!: any[];
+    public lifeTime!: LifeTime;
 }
 
 export class Container {
@@ -52,7 +58,7 @@ export class Container {
     }
 
     registerItem(registration: RegistryProvider): void {
-        const { token, _class, _value, injections } = registration;
+        const { token, _class, _value, _factory, injections } = registration;
         const isClass = !!_class;
 
         if (isClass && !this.isInjectable(_class!)) {
@@ -63,18 +69,26 @@ export class Container {
         const tokens: any[] = injections || [];
 
         registryItem.token = token;
-        registryItem.value = _class || _value;
-        const injs = Reflect.getMetadata(INJECTIONS_KEY, _class!);
-        registryItem.injections = isClass
-            ? (injs || []).map((inj: any, idx: any) => ({
-                token: inj,
-                paramIdx: idx
-            }))
-            : tokens.map((t, idx) => ({
-                token: t,
-                paramIdx: idx
-            }));
 
+        if (!!_value) {
+            registryItem.instance = _value;
+        }
+
+        registryItem.value = _class || _factory;
+
+        if (_class) {
+            const injs = Reflect.getMetadata(INJECTIONS_KEY, _class!);
+            registryItem.injections = isClass
+                ? (injs || []).map((inj: any, idx: any) => ({
+                    token: inj,
+                    paramIdx: idx
+                }))
+                : tokens.map((t, idx) => ({
+                    token: t,
+                    paramIdx: idx
+                }));
+        }
+        registryItem.lifeTime = registration.lifeTime || LifeTime.Persistent;
         this.registry.set(token, registryItem);
     }
 
@@ -94,11 +108,15 @@ export class Container {
             params[i.paramIdx] = resolved[idx];
         });
 
-        if (isClass) {
-            return new regItem.value(...params);
+        const instance = isClass
+            ? new regItem.value(...params)
+            : regItem.value(...params);
+
+        if (regItem.lifeTime === LifeTime.Persistent) {
+            regItem.instance = instance;
         }
 
-        return regItem.value(...params);
+        return instance;
     }
 
     private isInjectable(cls: Constructor): boolean {

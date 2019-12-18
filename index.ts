@@ -1,37 +1,10 @@
+import * as Router from '@koa/router';
+import * as Koa from 'koa';
 import './src/config/env';
 import { Container } from './src/core/di';
-import { Inject, Injectable } from './src/core/di';
-
-const TService = Symbol.for('Service');
-const TFoo = Symbol.for('Foo');
-const TSomeData = Symbol.for('SomeData');
-@Injectable()
-class Foo {
-    foo = 'foo';
-}
-
-@Injectable()
-class SomeData {
-    private data = [1, 2, 3, 4, 5];
-
-    getItem(index: number): number {
-        return this.data[index] || this.data[0];
-    };
-
-    getAll(): Array<number> {
-        return this.data;
-    };
-}
-
-@Injectable()
-class Service {
-    constructor(@Inject(TSomeData) private someData: SomeData) {}
-
-    run() {
-        console.log(this.someData.getAll());
-        console.log(this.someData.getItem(4));
-    }
-}
+import { LifeTime } from './src/core/di/container';
+import { AppProvider, TAppProvider } from './src/providers/app';
+import { StoreProvider, TStoreProvider } from './src/providers/db';
 
 
 function bootstrap() {
@@ -39,20 +12,28 @@ function bootstrap() {
 
     container.register([
         {
-            token: TFoo,
-            _class: Foo
+            token: 'Koa',
+            _value: new Koa(),
+            lifeTime: LifeTime.Persistent
         },
         {
-            token: TSomeData,
-            _class: SomeData
+            token: 'Router',
+            _value: new Router(),
+            lifeTime: LifeTime.Persistent
         },
         {
-            token: TService,
-            _class: Service
+            token: TStoreProvider,
+            _class: StoreProvider,
+            lifeTime: LifeTime.Persistent
+        },
+        {
+            token: TAppProvider,
+            _class: AppProvider,
+            lifeTime: LifeTime.Persistent
         }
     ]);
 
-    const app: Service = container.resolve(TService);
+    const app: AppProvider = container.resolve(TAppProvider);
     app.run();
 }
 
