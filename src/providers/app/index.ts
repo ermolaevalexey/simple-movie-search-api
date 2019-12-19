@@ -5,7 +5,7 @@ import { Container, Inject, Injectable } from '../../core/di';
 import { RegistryItem } from '../../core/di/container';
 import { CONTROLLER_KEY, ROUTE_KEY, RouteMethodParams } from '../../core/routing/decorators';
 import { isClass } from '../../core/utils/di';
-import { MoviesController } from '../movies/controller';
+
 
 export const TAppProvider = Symbol.for('AppProvider');
 
