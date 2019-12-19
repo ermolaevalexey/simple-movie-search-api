@@ -1,4 +1,4 @@
-import { Sequelize, DataType, Model } from 'sequelize-typescript';
+import { Sequelize } from 'sequelize-typescript';
 import { Inject, Injectable } from '../../core/di';
 import { StoreProvider, TStoreProvider } from '../db';
 import Movie from '../db/models/movie';
@@ -12,6 +12,14 @@ export class MoviesRepository {
     constructor(
         @Inject(TStoreProvider) private storeProvider: StoreProvider
     ) {}
+
+    async getAll(): Promise<Array<Movie>> {
+        try {
+            return await this.moviesRepository.findAll();
+        } catch (err) {
+            throw err;
+        }
+    }
 
     // async log(): Promise<void> {
     //     console.log(
