@@ -1,4 +1,4 @@
-import { Sequelize } from 'sequelize';
+import { Sequelize } from 'sequelize-typescript';
 import { Injectable } from '../../core/di';
 import '../../config/env';
 
@@ -20,6 +20,8 @@ export class StoreProvider {
             process.env.DB_PASSWORD,
             {
                 dialect: 'postgres',
+                models: [__dirname + '/models/**/*.ts'],
+                repositoryMode: true,
                 logging: process.env.NODE_ENV === 'production'
                     ? undefined
                     : console.log

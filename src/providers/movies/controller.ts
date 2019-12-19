@@ -9,18 +9,18 @@ export class MoviesController {
         @Inject('MoviesRepository') private repository: MoviesRepository,
         @Inject('Router') private router: Router
     ) {
-        this.router.get('/movies', this.getMovies);
+        // this.router.get('/movies', this.getMovies);
     }
 
-    getMovies = async (ctx: any, next: any) => {
-        try {
-            const movies = await this.repository.getMovies();
-            ctx.headers['Content-Type'] = 'application/json; charset=UTF-8';
-            ctx.status = 200;
-            ctx.body = JSON.stringify(movies);
-        } catch (err) {
-            ctx.throw(err);
-        }
-        await next();
-    }
+    // getMovies = async (ctx: any, next: any) => {
+    //     try {
+    //         const movies = await this.repository.getMovies();
+    //         ctx.headers['Content-Type'] = 'application/json; charset=UTF-8';
+    //         ctx.status = 200;
+    //         ctx.body = JSON.stringify(movies);
+    //     } catch (err) {
+    //         ctx.throw(err);
+    //     }
+    //     await next();
+    // }
 }
