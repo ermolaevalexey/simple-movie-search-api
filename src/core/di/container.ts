@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import { isClass } from '../utils/di';
 import { INJECTABLE_KEY, INJECTIONS_KEY } from './decorators';
 
 
@@ -36,13 +37,13 @@ export class RegistryItem {
 
 export class Container {
 
-    private registry: Map<any, RegistryItem | any> = new Map();
+    private _registry: Map<any, RegistryItem | any> = new Map();
 
     constructor() {
-        // this.register({
-        //     token: _Container,
-        //     useValue: this
-        // });
+        this.register({
+            token: 'Container',
+            _value: this
+        });
     }
 
     register(registration: RegistryProvider | Array<RegistryProvider>): void {
@@ -89,17 +90,16 @@ export class Container {
                 }));
         }
         registryItem.lifeTime = registration.lifeTime || LifeTime.Persistent;
-        this.registry.set(token, registryItem);
+        this._registry.set(token, registryItem);
     }
 
     resolve<T>(token: any): T {
-        const regItem = this.registry.get(token);
+        const regItem = this._registry.get(token);
 
         if (!!regItem.instance) {
             return regItem.instance;
         }
 
-        const isClass = this.isClass(regItem.value);
         const params: any[] = [];
         const injections = regItem.injections || [];
         const resolved = injections.map((i: any) => this.resolve(i.token));
@@ -108,7 +108,7 @@ export class Container {
             params[i.paramIdx] = resolved[idx];
         });
 
-        const instance = isClass
+        const instance = isClass(regItem.value)
             ? new regItem.value(...params)
             : regItem.value(...params);
 
@@ -119,17 +119,11 @@ export class Container {
         return instance;
     }
 
-    private isInjectable(cls: Constructor): boolean {
-        return !!Reflect.getMetadata(INJECTABLE_KEY, cls);
+    get registry(): Map<any, RegistryItem | any> {
+        return this._registry;
     }
 
-    private isClass(token: any): boolean {
-        try {
-            Reflect.construct(String, [], token);
-        } catch (err) {
-            return false;
-        }
-
-        return true;
+    private isInjectable(cls: Constructor): boolean {
+        return !!Reflect.getMetadata(INJECTABLE_KEY, cls);
     }
 }

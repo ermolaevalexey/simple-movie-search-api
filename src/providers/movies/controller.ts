@@ -1,25 +1,30 @@
-import * as Router from '@koa/router';
+import * as Koa from 'koa';
 import { Inject, Injectable } from '../../core/di';
+import { Controller, GetRoute } from '../../core/routing/decorators';
 import { MoviesRepository } from './repository';
 
 
+@Controller('/movies')
 @Injectable()
 export class MoviesController {
     constructor(
-        @Inject('MoviesRepository') private repository: MoviesRepository,
-        @Inject('Router') private router: Router
-    ) {
-        this.router.get('/movies', this.getAll);
-    }
+        @Inject('MoviesRepository') private repository: MoviesRepository
+    ) {}
 
-    getAll = async (ctx: any, next: any) => {
+    @GetRoute('/')
+    getAll = async (ctx: Koa.Context, next: Function) => {
         try {
             const movies = await this.repository.getAll();
-            console.log(movies.map((item) => ({
-                id: item.id,
-                title: item.title,
-                year: item.year
-            })));
+            // ctx.response.s.()
+            ctx.body = JSON.stringify(
+                movies.map((item) => ({
+                    id: item.id,
+                    title: item.title,
+                    year: item.year
+                }))
+            );
+
+            await next();
         } catch (err) {
             throw err;
         }
