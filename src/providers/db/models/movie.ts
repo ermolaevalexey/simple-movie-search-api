@@ -1,4 +1,4 @@
-import { Column, Model, Table, DataType, ForeignKey } from 'sequelize-typescript';
+import { Column, Model, Table, DataType, ForeignKey, IsUUID } from 'sequelize-typescript';
 import Director from './director';
 
 
@@ -8,6 +8,7 @@ import Director from './director';
 })
 export default class Movie extends Model<Movie> {
 
+    @IsUUID(4)
     @Column({ type: DataType.UUIDV4, primaryKey: true })
     id: string = this.id;
 

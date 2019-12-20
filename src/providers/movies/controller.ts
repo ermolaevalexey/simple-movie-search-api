@@ -15,7 +15,8 @@ export class MoviesController {
     getAll = async (ctx: Koa.Context, next: Function) => {
         try {
             const movies = await this.repository.getAll();
-            // ctx.response.s.()
+            ctx.headers['Content-Type'] = 'application/json; charset=UTF-8';
+            ctx.status = 200;
             ctx.body = JSON.stringify(
                 movies.map((item) => ({
                     id: item.id,
@@ -23,22 +24,22 @@ export class MoviesController {
                     year: item.year
                 }))
             );
-
             await next();
         } catch (err) {
             throw err;
         }
-    }
+    };
 
-    // getMovies = async (ctx: any, next: any) => {
-    //     try {
-    //         const movies = await this.repository.getMovies();
-    //         ctx.headers['Content-Type'] = 'application/json; charset=UTF-8';
-    //         ctx.status = 200;
-    //         ctx.body = JSON.stringify(movies);
-    //     } catch (err) {
-    //         ctx.throw(err);
-    //     }
-    //     await next();
-    // }
+    @GetRoute('/:id')
+    getItem = async (ctx: Koa.Context, next: Function) => {
+        try {
+            const movie = await this.repository.getItem(ctx.params.id);
+            ctx.headers['Content-Type'] = 'application/json; charset=UTF-8';
+            ctx.status = 200;
+            ctx.body = JSON.stringify(movie);
+            await next();
+        } catch (err) {
+            throw err;
+        }
+    };
 }

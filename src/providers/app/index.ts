@@ -46,6 +46,7 @@ export class AppProvider {
         this.server
             .use(bodyParser())
             .use(this.router.routes())
+            .use(this.router.allowedMethods())
             .listen(3000);
     }
 }
