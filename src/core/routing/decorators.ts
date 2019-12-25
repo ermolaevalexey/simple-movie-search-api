@@ -20,6 +20,7 @@ export enum ContentTypeKey {
 export interface RouteParams {
     path: string;
     method: MethodKey;
+    contentType: ContentTypeKey;
 }
 
 export interface RouteMethodParams extends RouteParams {
@@ -51,10 +52,11 @@ export function Route(params: RouteParams) {
     }
 }
 
-export function GetRoute(path: string) {
+export function GetRoute(path: string, contentType: ContentTypeKey) {
     return Route({
         path,
-        method: MethodKey.Get
+        method: MethodKey.Get,
+        contentType
     });
 }
 

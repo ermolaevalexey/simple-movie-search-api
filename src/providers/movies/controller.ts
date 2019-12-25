@@ -1,6 +1,6 @@
 import * as Koa from 'koa';
 import { Inject, Injectable } from '../../core/di';
-import { Controller, GetRoute } from '../../core/routing/decorators';
+import { ContentTypeKey, Controller, GetRoute } from '../../core/routing/decorators';
 import { MoviesRepository } from './repository';
 
 
@@ -11,7 +11,7 @@ export class MoviesController {
         @Inject('MoviesRepository') private repository: MoviesRepository
     ) {}
 
-    @GetRoute('/')
+    @GetRoute('/', ContentTypeKey.Json)
     getAll = async (ctx: Koa.Context, next: Function) => {
         const movies = await this.repository.getAll();
         ctx.state.data = movies.map((item) => ({
@@ -22,7 +22,7 @@ export class MoviesController {
         await next();
     };
 
-    @GetRoute('/:id')
+    @GetRoute('/:id', ContentTypeKey.Json)
     getItem = async (ctx: Koa.Context, next: Function) => {
         const movie = await this.repository.getItem(ctx.params.id);
         ctx.state.data = movie;

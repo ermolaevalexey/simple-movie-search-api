@@ -40,7 +40,7 @@ export class AppProvider {
                     baseControllerPath + route.path,
                     this.middlewareProvider.handleError(),
                     (controller as any)[route.handler],
-                    this.middlewareProvider.setContentType(ContentTypeKey.Json),
+                    this.middlewareProvider.setContentType(route.contentType),
                     this.middlewareProvider.setStatus(route.method),
                     this.middlewareProvider.sendData(),
                 );
