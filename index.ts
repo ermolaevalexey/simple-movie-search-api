@@ -6,6 +6,8 @@ import { LifeTime } from './src/core/di/container';
 import EnvProvider from './src/core/providers/env';
 import { AppProvider, TAppProvider } from './src/providers/app';
 import { StoreProvider, TStoreProvider } from './src/core/providers/db';
+import { DirectorsController } from './src/providers/directors/controller';
+import { DirectorsRepository } from './src/providers/directors/repository';
 import { MiddlewareProvider } from './src/providers/middleware';
 import { MoviesController } from './src/providers/movies/controller';
 import { MoviesRepository } from './src/providers/movies/repository';
@@ -53,6 +55,16 @@ function bootstrap() {
         {
             token: 'MoviesController',
             _class: MoviesController,
+            lifeTime: LifeTime.PerRequest
+        },
+        {
+            token: 'DirectorsRepository',
+            _class: DirectorsRepository,
+            lifeTime: LifeTime.PerRequest
+        },
+        {
+            token: 'DirectorsController',
+            _class: DirectorsController,
             lifeTime: LifeTime.PerRequest
         }
     ]);

@@ -7,6 +7,7 @@ import { MoviesRepository } from './repository';
 @Controller('/movies')
 @Injectable()
 export class MoviesController {
+
     constructor(
         @Inject('MoviesRepository') private repository: MoviesRepository
     ) {}
