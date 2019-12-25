@@ -1,13 +1,16 @@
 import * as Koa from 'koa';
 import { Injectable } from '../../core/di';
-import { /*ContentTypeKey,*/ MethodKey } from '../../core/routing/decorators';
+import { ContentTypeKey, MethodKey } from '../../core/routing/decorators';
 
 
 @Injectable()
 export class MiddlewareProvider {
 
-    setContentType(type: any): Koa.Middleware {
-        return this.setHeaders({ 'Content-Type': type });
+    setContentType(type: ContentTypeKey): Koa.Middleware {
+        return async (ctx: Koa.Context, next: Function) => {
+            ctx.type = type;
+            await next();
+        }
     }
 
     setStatus(method: MethodKey): Koa.Middleware {
@@ -26,9 +29,9 @@ export class MiddlewareProvider {
         return this.setHttpStatus(getStatus());
     }
 
-    sendData(type: any): Koa.Middleware {
+    sendData(): Koa.Middleware {
         return async (ctx: Koa.Context, next: Function) => {
-            ctx.body = this.transformData(type, ctx.state.data);
+            ctx.body = this.transformData((ctx.type as ContentTypeKey), ctx.state.data);
         }
     }
 
@@ -57,9 +60,9 @@ export class MiddlewareProvider {
         }
     }
 
-    private transformData(type: any, data: any): any {
+    private transformData(type: ContentTypeKey, data: any): any {
         switch (type) {
-            case 'application/json':
+            case ContentTypeKey.Json:
                 return JSON.stringify(data);
             default:
                 return data;

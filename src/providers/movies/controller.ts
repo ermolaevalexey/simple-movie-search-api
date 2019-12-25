@@ -19,6 +19,8 @@ export class MoviesController {
             title: item.title,
             year: item.year
         }));
+        // ctx.body = JSON.stringify(ctx.state.data);
+        await next();
     };
 
     @GetRoute('/:id')

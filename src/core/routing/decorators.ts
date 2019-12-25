@@ -12,6 +12,11 @@ export enum MethodKey {
     Delete = 'delete'
 }
 
+export enum ContentTypeKey {
+    Json = 'application/json',
+    Html = 'text/html'
+}
+
 export interface RouteParams {
     path: string;
     method: MethodKey;

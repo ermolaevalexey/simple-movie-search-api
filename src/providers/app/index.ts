@@ -1,9 +1,9 @@
+import * as Router from '@koa/router';
 import * as Koa from 'koa';
 import * as bodyParser from 'koa-bodyparser';
-import * as Router from '@koa/router';
 import { Container, Inject, Injectable } from '../../core/di';
 import { RegistryItem } from '../../core/di/container';
-import { CONTROLLER_KEY, ROUTE_KEY, RouteMethodParams } from '../../core/routing/decorators';
+import { ContentTypeKey, CONTROLLER_KEY, ROUTE_KEY, RouteMethodParams } from '../../core/routing/decorators';
 import { isClass } from '../../core/utils/di';
 import { MiddlewareProvider } from '../middleware';
 
@@ -40,9 +40,9 @@ export class AppProvider {
                     baseControllerPath + route.path,
                     this.middlewareProvider.handleError(),
                     (controller as any)[route.handler],
-                    this.middlewareProvider.setContentType('application/json'),
+                    this.middlewareProvider.setContentType(ContentTypeKey.Json),
                     this.middlewareProvider.setStatus(route.method),
-                    this.middlewareProvider.sendData('application/json')
+                    this.middlewareProvider.sendData(),
                 );
             });
         });
