@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize-typescript';
 import { Inject, Injectable } from '../../core/di';
 import { StoreProvider, TStoreProvider } from '../../core/providers/db';
-import Movie from '../../core/providers/db/models/movie';
+import Movie from '../../models/movie';
 
 
 @Injectable()
