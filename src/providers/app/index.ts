@@ -3,7 +3,8 @@ import * as Koa from 'koa';
 import * as bodyParser from 'koa-bodyparser';
 import { Container, Inject, Injectable } from '../../core/di';
 import { RegistryItem } from '../../core/di/container';
-import { ContentTypeKey, CONTROLLER_KEY, ROUTE_KEY, RouteMethodParams } from '../../core/routing/decorators';
+import EnvProvider from '../../core/providers/env';
+import { CONTROLLER_KEY, ROUTE_KEY, RouteMethodParams } from '../../core/routing/decorators';
 import { isClass } from '../../core/utils/di';
 import { MiddlewareProvider } from '../middleware';
 
@@ -16,6 +17,7 @@ export class AppProvider {
     constructor(
         @Inject('Koa') private server: Koa,
         @Inject('Router') private router: Router,
+        @Inject('EnvProvider') private envProvider: EnvProvider,
         @Inject('Container') private container: Container,
         @Inject('MiddlewareProvider') private middlewareProvider: MiddlewareProvider
     ) {
@@ -53,6 +55,6 @@ export class AppProvider {
             .use(bodyParser())
             .use(this.router.routes())
             .use(this.router.allowedMethods())
-            .listen(3000);
+            .listen(this.envProvider.appPort);
     }
 }

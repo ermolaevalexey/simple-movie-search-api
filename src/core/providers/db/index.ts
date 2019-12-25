@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize-typescript';
-import { Injectable } from '../../core/di';
+import { Injectable } from '../../di';
 import '../../config/env';
 
 

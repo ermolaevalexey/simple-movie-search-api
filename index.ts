@@ -1,10 +1,11 @@
 import * as Router from '@koa/router';
 import * as Koa from 'koa';
-import './src/config/env';
+import './src/core/config/env';
 import { Container } from './src/core/di';
 import { LifeTime } from './src/core/di/container';
+import EnvProvider from './src/core/providers/env';
 import { AppProvider, TAppProvider } from './src/providers/app';
-import { StoreProvider, TStoreProvider } from './src/providers/db';
+import { StoreProvider, TStoreProvider } from './src/core/providers/db';
 import { MiddlewareProvider } from './src/providers/middleware';
 import { MoviesController } from './src/providers/movies/controller';
 import { MoviesRepository } from './src/providers/movies/repository';
@@ -22,6 +23,11 @@ function bootstrap() {
         {
             token: 'Router',
             _value: new Router(),
+            lifeTime: LifeTime.Persistent
+        },
+        {
+            token: 'EnvProvider',
+            _value: new EnvProvider(),
             lifeTime: LifeTime.Persistent
         },
         {
