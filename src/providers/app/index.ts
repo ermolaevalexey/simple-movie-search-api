@@ -5,6 +5,7 @@ import { Container, Inject, Injectable } from '../../core/di';
 import { RegistryItem } from '../../core/di/container';
 import { CONTROLLER_KEY, ROUTE_KEY, RouteMethodParams } from '../../core/routing/decorators';
 import { isClass } from '../../core/utils/di';
+import { MiddlewareProvider } from '../middleware';
 
 
 export const TAppProvider = Symbol.for('AppProvider');
@@ -15,7 +16,8 @@ export class AppProvider {
     constructor(
         @Inject('Koa') private server: Koa,
         @Inject('Router') private router: Router,
-        @Inject('Container') private container: Container
+        @Inject('Container') private container: Container,
+        @Inject('MiddlewareProvider') private middlewareProvider: MiddlewareProvider
     ) {
         this.registerControllers();
     }
@@ -36,7 +38,11 @@ export class AppProvider {
             routes.forEach(route => {
                 this.router[route.method](
                     baseControllerPath + route.path,
-                    (controller as any)[route.handler]
+                    this.middlewareProvider.handleError(),
+                    (controller as any)[route.handler],
+                    this.middlewareProvider.setContentType('application/json'),
+                    this.middlewareProvider.setStatus(route.method),
+                    this.middlewareProvider.sendData('application/json')
                 );
             });
         });

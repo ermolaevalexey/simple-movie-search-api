@@ -5,6 +5,7 @@ import { Container } from './src/core/di';
 import { LifeTime } from './src/core/di/container';
 import { AppProvider, TAppProvider } from './src/providers/app';
 import { StoreProvider, TStoreProvider } from './src/providers/db';
+import { MiddlewareProvider } from './src/providers/middleware';
 import { MoviesController } from './src/providers/movies/controller';
 import { MoviesRepository } from './src/providers/movies/repository';
 
@@ -22,6 +23,11 @@ function bootstrap() {
             token: 'Router',
             _value: new Router(),
             lifeTime: LifeTime.Persistent
+        },
+        {
+            token: 'MiddlewareProvider',
+            _class: MiddlewareProvider,
+            lifeTime: LifeTime.PerRequest
         },
         {
             token: TStoreProvider,

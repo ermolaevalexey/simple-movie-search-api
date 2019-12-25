@@ -13,33 +13,18 @@ export class MoviesController {
 
     @GetRoute('/')
     getAll = async (ctx: Koa.Context, next: Function) => {
-        try {
-            const movies = await this.repository.getAll();
-            ctx.headers['Content-Type'] = 'application/json; charset=UTF-8';
-            ctx.status = 200;
-            ctx.body = JSON.stringify(
-                movies.map((item) => ({
-                    id: item.id,
-                    title: item.title,
-                    year: item.year
-                }))
-            );
-            await next();
-        } catch (err) {
-            throw err;
-        }
+        const movies = await this.repository.getAll();
+        ctx.state.data = movies.map((item) => ({
+            id: item.id,
+            title: item.title,
+            year: item.year
+        }));
     };
 
     @GetRoute('/:id')
     getItem = async (ctx: Koa.Context, next: Function) => {
-        try {
-            const movie = await this.repository.getItem(ctx.params.id);
-            ctx.headers['Content-Type'] = 'application/json; charset=UTF-8';
-            ctx.status = 200;
-            ctx.body = JSON.stringify(movie);
-            await next();
-        } catch (err) {
-            throw err;
-        }
+        const movie = await this.repository.getItem(ctx.params.id);
+        ctx.state.data = JSON.stringify(movie);
+        await next();
     };
 }
