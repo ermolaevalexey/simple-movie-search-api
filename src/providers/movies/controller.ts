@@ -19,14 +19,13 @@ export class MoviesController {
             title: item.title,
             year: item.year
         }));
-        // ctx.body = JSON.stringify(ctx.state.data);
         await next();
     };
 
     @GetRoute('/:id')
     getItem = async (ctx: Koa.Context, next: Function) => {
         const movie = await this.repository.getItem(ctx.params.id);
-        ctx.state.data = JSON.stringify(movie);
+        ctx.state.data = movie;
         await next();
     };
 }
