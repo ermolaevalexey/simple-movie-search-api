@@ -1,6 +1,6 @@
 import * as Koa from 'koa';
 import { Inject, Injectable } from '../../core/di';
-import { ContentTypeKey, Controller, GetRoute } from '../../core/routing/decorators';
+import { ContentTypeKey, Controller, DeleteRoute, GetRoute, PostRoute, PutRoute } from '../../core/routing/decorators';
 import { MoviesRepository } from './repository';
 
 
@@ -27,6 +27,28 @@ export class MoviesController {
     getItem = async (ctx: Koa.Context, next: Function) => {
         const movie = await this.repository.getItem(ctx.params.id);
         ctx.state.data = movie;
+        await next();
+    };
+
+    @PostRoute('/', ContentTypeKey.Json)
+    createItem = async (ctx: Koa.Context, next: Function) => {
+        ctx.state.data = await this.repository.createItem(ctx.request.body);
+        await next();
+    };
+
+    @PutRoute('/:id', ContentTypeKey.Json)
+    updateItem = async (ctx: Koa.Context, next: Function) => {
+        ctx.state.data = await this.repository.updateItem(
+            ctx.params.id,
+            ctx.request.body
+        );
+        await next();
+    };
+
+    @DeleteRoute('/:id', ContentTypeKey.Json)
+    deleteItem = async (ctx: Koa.Context, next: Function) => {
+        await this.repository.deleteItem(ctx.params.id);
+        ctx.state.data = { id: ctx.params.id };
         await next();
     };
 }

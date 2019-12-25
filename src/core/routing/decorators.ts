@@ -60,4 +60,28 @@ export function GetRoute(path: string, contentType: ContentTypeKey) {
     });
 }
 
+export function PostRoute(path: string, contentType: ContentTypeKey) {
+    return Route({
+        path,
+        method: MethodKey.Post,
+        contentType
+    });
+}
+
+export function PutRoute(path: string, contentType: ContentTypeKey) {
+    return Route({
+        path,
+        method: MethodKey.Put,
+        contentType
+    });
+}
+
+export function DeleteRoute(path: string, contentType: ContentTypeKey) {
+    return Route({
+        path,
+        method: MethodKey.Delete,
+        contentType
+    });
+}
+
 

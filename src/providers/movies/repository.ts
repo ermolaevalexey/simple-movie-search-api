@@ -31,6 +31,43 @@ export class MoviesRepository {
         }
     }
 
+    async createItem(params: any): Promise<Movie | null> {
+        try {
+            return await this.moviesRepository.create(
+                params, { fields: Object.keys(params) }
+            );
+        } catch (err) {
+            console.error(err);
+            return null;
+        }
+    }
+
+    async updateItem(id: string, params: any): Promise<Movie | null> {
+        try {
+            return await this.moviesRepository.update(
+                params,
+                {
+                    where: { id },
+                    fields: Object.keys(params)
+                }
+            );
+        } catch (err) {
+            console.error(err);
+            return null;
+        }
+    }
+
+    async deleteItem(id: string): Promise<Movie | null> {
+        try {
+            return await this.moviesRepository.destroy(
+                { where: { id } }
+            );
+        } catch (err) {
+            console.error(err);
+            return null;
+        }
+    }
+
     private get store(): Sequelize {
         return this.storeProvider.store;
     }

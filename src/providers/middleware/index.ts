@@ -14,15 +14,20 @@ export class MiddlewareProvider {
     }
 
     setStatus(method: MethodKey): Koa.Middleware {
-        const getStatus = (): number => {
-            switch (method) {
-                case MethodKey.Get:
-                case MethodKey.Put:
-                    return 200;
-                case MethodKey.Post:
-                    return 201;
-                case MethodKey.Delete:
-                    return 204;
+        const getStatus = (): (ctx: Koa.Context) => number => {
+            return (ctx: Koa.Context) => {
+                if (ctx.method === MethodKey.Get.toUpperCase() && ctx.state.data === null) {
+                    return 404;
+                }
+                switch (method) {
+                    case MethodKey.Get:
+                    case MethodKey.Put:
+                        return 200;
+                    case MethodKey.Post:
+                        return 201;
+                    case MethodKey.Delete:
+                        return 204;
+                }
             }
         };
 
@@ -53,9 +58,9 @@ export class MiddlewareProvider {
         }
     }
 
-    private setHttpStatus(status: number): Koa.Middleware {
+    private setHttpStatus(getStatus: (ctx: Koa.Context) => number): Koa.Middleware {
         return async (ctx: Koa.Context, next: Function) => {
-            ctx.status = status;
+            ctx.status = getStatus(ctx);
             await next();
         }
     }

@@ -12,7 +12,7 @@ export default class Movie extends Model<Movie> {
     @Column({ type: DataType.UUIDV4, primaryKey: true })
     id: string = this.id;
 
-    @Column({ type: DataType.STRING, allowNull: false })
+    @Column({ type: DataType.STRING, allowNull: true })
     // @ts-ignore
     title: string = this.title;
 
