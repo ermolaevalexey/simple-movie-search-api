@@ -14,22 +14,12 @@ export class DirectorsRepository {
     ) {}
 
 
-    async getAll(): Promise<Array<any>> {
-        try {
-            return await this.directorsRepository.findAll();
-        } catch (err) {
-            console.error(err);
-            return [];
-        }
+    async getAll(): Promise<Array<Director>> {
+        return await this.directorsRepository.findAll();
     }
 
-    async getItem(id: string): Promise<any> {
-        try {
-            return await this.directorsRepository.findByPk(id);
-        } catch (err) {
-            console.error(err);
-            return null;
-        }
+    async getItem(id: string): Promise<Director> {
+        return await this.directorsRepository.findByPk(id);
     }
 
     async createItem(params: Partial<DirectorParams>): Promise<DirectorParams> {
