@@ -1,6 +1,6 @@
 {
   "name": "simple-movie-search-api",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A simple movie search API for angular course",
   "main": "index.ts",
   "scripts": {
@@ -14,7 +14,9 @@
     "koa": "2.11.0",
     "pg": "7.14.0",
     "pg-hstore": "2.3.3",
-    "sequelize": "5.21.2",
+    "reflect-metadata": "^0.1.13",
+    "sequelize": "^5.21.3",
+    "sequelize-typescript": "^1.1.0",
     "ts-node": "8.4.1",
     "typescript": "3.7.2"
   },
