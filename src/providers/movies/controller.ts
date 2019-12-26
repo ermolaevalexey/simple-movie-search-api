@@ -15,12 +15,7 @@ export class MoviesController {
 
     @GetRoute('/', ContentTypeKey.Json)
     getAll = async (ctx: Koa.Context, next: Function) => {
-        const movies = await this.repository.getAll();
-        ctx.state.data = movies.map((item) => ({
-            id: item.id,
-            title: item.title,
-            year: item.year
-        }));
+        ctx.state.data = await this.repository.getAll();
         await next();
     };
 
