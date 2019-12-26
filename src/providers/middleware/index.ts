@@ -46,7 +46,8 @@ export class MiddlewareProvider {
                 await next();
             } catch (err) {
                 ctx.status = 502;
-                ctx.body = err.message;
+                ctx.headers['Content-Type'] = 'application/json';
+                ctx.body = JSON.stringify({ error: err.message });
             }
         }
     }
