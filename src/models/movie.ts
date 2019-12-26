@@ -1,63 +1,39 @@
-import * as S from 'sequelize';
-import { DataTypes, Model, Op } from 'sequelize';
-import db from '../db';
-import { MovieDirectorModel } from './director';
+import { Column, Model, Table, DataType, ForeignKey, IsUUID } from 'sequelize-typescript';
+import Director from './director';
 
 
-export interface Movie {
+@Table({
+    tableName: 'movies',
+    timestamps: false
+})
+export default class Movie extends Model<Movie> {
+
+    @IsUUID(4)
+    @Column({ type: DataType.UUIDV4, primaryKey: true })
+    id: string = this.id;
+
+    @Column({ type: DataType.STRING, allowNull: true })
+    // @ts-ignore
+    title: string = this.title;
+
+    @Column({ type: DataType.INTEGER, allowNull: false })
+    // @ts-ignore
+    year: number = this.year;
+
+    @Column({ type: DataType.STRING, allowNull: true })
+    // @ts-ignore
+    description: string = this.description;
+
+    @ForeignKey(() => Director)
+    @Column({ type: DataType.UUIDV4, allowNull: true })
+    // @ts-ignore
+    director: string = this.director;
+}
+
+export interface MovieParams {
+    id: string;
     title: string;
-    year: number;
-    director?: string;
-    description?: string;
-    posterImage?: string;
+    year: string;
+    description: string;
+    director: string;
 }
-
-export class MovieModel extends Model {
-    public id!: string;
-    public title!: string;
-    public description!: string;
-    public year!: number;
-    public director!: string;
-    private MovieDirectorModel!: MovieDirectorModel;
-
-    static async getMovies(): Promise<Array<Movie>> {
-        try {
-            const models: Array<MovieModel> = await this.findAll({
-                attributes: ['title', 'description', 'year', 'director'],
-                include: [{
-                    model: MovieDirectorModel,
-                    attributes: ['name'],
-                    where: { id: { [Op.eq]: S.col('director') } }
-                }]
-            });
-
-            return models.map(model => ({
-                title: model.title,
-                year: model.year,
-                description: model.description,
-                director: model.MovieDirectorModel.name
-            }));
-        } catch (err) {
-            throw err;
-        }
-    }
-}
-
-MovieModel.init({
-    id: {
-        type: DataTypes.UUIDV4.key,
-        primaryKey: true
-    },
-    title: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    year: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    description: DataTypes.STRING,
-    director: DataTypes.UUIDV4
-}, { sequelize: db, tableName: 'movies', timestamps: false })
-
-MovieModel.belongsTo(MovieDirectorModel, { foreignKey: 'director' });
