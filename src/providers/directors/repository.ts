@@ -32,6 +32,33 @@ export class DirectorsRepository {
         }
     }
 
+    async createItem(params: any): Promise<any> {
+        try {
+            const director = await this.directorsRepository.create(
+                params, { fields: Object.keys(params)
+            });
+            return director;
+        } catch (err) {
+            console.error(err);
+            return null;
+        }
+    }
+
+    async updateItem(id: string, params: any): Promise<any> {
+        try {
+            return await this.directorsRepository.update(
+                params,
+                {
+                    where: { id },
+                    fields: Object.keys(params)
+                }
+            );
+        } catch (err) {
+            console.error(err);
+            return null;
+        }
+    }
+
     private get store(): Sequelize {
         return this.storeProvider.store;
     }
