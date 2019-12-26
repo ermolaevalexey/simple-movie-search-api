@@ -4,19 +4,27 @@
   "description": "A simple movie search API for angular course",
   "main": "index.ts",
   "scripts": {
-    "start": "ts-node index.ts",
+    "start": "nodemon",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@koa/router": "8.0.2",
     "koa": "2.11.0",
-    "koa-router": "7.4.0",
+    "pg": "7.14.0",
+    "pg-hstore": "2.3.3",
+    "sequelize": "5.21.2",
     "ts-node": "8.4.1",
     "typescript": "3.7.2"
   },
   "devDependencies": {
     "@types/koa": "2.0.51",
-    "@types/node": "12.12.6"
+    "@types/koa-bodyparser": "^4.3.0",
+    "@types/koa__router": "^8.0.1",
+    "@types/node": "12.12.6",
+    "dotenv": "^8.2.0",
+    "koa-bodyparser": "^4.2.1",
+    "tslint": "^5.20.1"
   }
 }
