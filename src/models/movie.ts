@@ -29,3 +29,11 @@ export default class Movie extends Model<Movie> {
     // @ts-ignore
     director: string = this.director;
 }
+
+export interface MovieParams {
+    id: string;
+    title: string;
+    year: string;
+    description: string;
+    director: string;
+}

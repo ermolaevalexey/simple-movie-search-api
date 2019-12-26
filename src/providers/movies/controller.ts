@@ -1,6 +1,7 @@
 import * as Koa from 'koa';
 import { Inject, Injectable } from '../../core/di';
 import { ContentTypeKey, Controller, DeleteRoute, GetRoute, PostRoute, PutRoute } from '../../core/routing/decorators';
+import { MovieParams } from '../../models/movie';
 import { MoviesRepository } from './repository';
 
 
@@ -32,7 +33,7 @@ export class MoviesController {
 
     @PostRoute('/', ContentTypeKey.Json)
     createItem = async (ctx: Koa.Context, next: Function) => {
-        ctx.state.data = await this.repository.createItem(ctx.request.body);
+        ctx.state.data = await this.repository.createItem(ctx.request.body as Partial<MovieParams>);
         await next();
     };
 

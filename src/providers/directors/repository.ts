@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize-typescript';
 import { Inject, Injectable } from '../../core/di';
 import { StoreProvider, TStoreProvider } from '../../core/providers/db';
-import Director from '../../models/director';
+import Director, { DirectorParams } from '../../models/director';
 
 
 @Injectable()
@@ -32,31 +32,22 @@ export class DirectorsRepository {
         }
     }
 
-    async createItem(params: any): Promise<any> {
-        try {
-            const director = await this.directorsRepository.create(
-                params, { fields: Object.keys(params)
-            });
-            return director;
-        } catch (err) {
-            console.error(err);
-            return null;
-        }
+    async createItem(params: Partial<DirectorParams>): Promise<DirectorParams> {
+        return await this.directorsRepository.create(
+            params, { fields: Object.keys(params)
+        });
     }
 
-    async updateItem(id: string, params: any): Promise<any> {
-        try {
-            return await this.directorsRepository.update(
-                params,
-                {
-                    where: { id },
-                    fields: Object.keys(params)
-                }
-            );
-        } catch (err) {
-            console.error(err);
-            return null;
-        }
+    async updateItem(id: string, params: Partial<DirectorParams>): Promise<boolean> {
+        const [ updated ] = await this.directorsRepository.update(
+            params,
+            {
+                where: { id },
+                fields: Object.keys(params)
+            }
+        );
+
+        return Boolean(updated);
     }
 
     private get store(): Sequelize {

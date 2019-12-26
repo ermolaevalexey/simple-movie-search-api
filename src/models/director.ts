@@ -18,3 +18,14 @@ export default class Director extends Model<Director> {
     // @ts-ignore
     movies: Array<string> = this.movies;
 }
+
+export interface DirectorParams {
+    id: string;
+    name: string;
+    movies: Array<string>;
+}
+
+export interface DirectorUpdateParams {
+    id: string;
+    success: boolean;
+}
