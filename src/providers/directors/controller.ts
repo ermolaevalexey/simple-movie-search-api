@@ -14,12 +14,7 @@ export class DirectorsController {
 
     @GetRoute('/', ContentTypeKey.Json)
     getAll = async (ctx: Koa.Context, next: Function) => {
-        const directors = await this.directorsRepository.getAll();
-        ctx.state.data = directors.map(dir => ({
-            id: dir.id,
-            name: dir.name,
-            movies: dir.movies
-        }));
+        ctx.state.data = await this.directorsRepository.getAll();
         await next();
     };
 
