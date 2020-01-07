@@ -36,4 +36,5 @@ export interface MovieParams {
     year: string;
     description: string;
     director: string;
+    poster?: File;
 }

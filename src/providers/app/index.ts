@@ -1,6 +1,6 @@
 import * as Router from '@koa/router';
 import * as Koa from 'koa';
-import * as bodyParser from 'koa-bodyparser';
+import * as koaBody from 'koa-body';
 import { Container, Inject, Injectable } from '../../core/di';
 import { RegistryItem } from '../../core/di/container';
 import EnvProvider from '../../core/providers/env';
@@ -52,7 +52,10 @@ export class AppProvider {
 
     run() {
         this.server
-            .use(bodyParser())
+            .use(koaBody({
+                multipart: true,
+                json: true
+            }))
             .use(this.router.routes())
             .use(this.router.allowedMethods())
             .listen(this.envProvider.appPort);
