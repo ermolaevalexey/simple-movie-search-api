@@ -19,6 +19,7 @@ export class StoreProvider {
     }
 
     private initStore(params: { dbname: string, user: string, password: string, host: string, port: number }): Sequelize {
+        console.log(JSON.stringify(params));
         return new Sequelize(
             params.dbname,
             params.user,
