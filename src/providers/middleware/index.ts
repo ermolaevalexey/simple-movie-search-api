@@ -16,7 +16,12 @@ export class MiddlewareProvider {
     setStatus(method: MethodKey): Koa.Middleware {
         const getStatus = (): (ctx: Koa.Context) => number => {
             return (ctx: Koa.Context) => {
-                if (ctx.method === MethodKey.Get.toUpperCase() && ctx.state.data === null) {
+                if ([
+                    MethodKey.Get.toUpperCase(),
+                    MethodKey.Put.toUpperCase(),
+                    MethodKey.Delete.toUpperCase()].includes(ctx.method) &&
+                    ctx.state.data === null
+                ) {
                     return 404;
                 }
                 switch (method) {

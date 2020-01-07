@@ -11,18 +11,15 @@ export class StoreProvider {
     constructor(
         @Inject('EnvProvider') private envProvider: EnvProvider
     ) {
-        this._store = this.initStore(this.envProvider.store);
+        this._store = this.initStore(this.envProvider.dbUrl);
     }
 
     get store(): Sequelize {
         return this._store;
     }
 
-    private initStore(params: { name: string, user: string, password: string }): Sequelize {
-        return new Sequelize(
-            params.name,
-            params.user,
-            params.password,
+    private initStore(dbUrl: string): Sequelize {
+        return new Sequelize(dbUrl,
             {
                 dialect: 'postgres',
                 models: [__dirname + '../../../../models/**/*.ts'],
