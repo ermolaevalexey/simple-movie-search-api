@@ -9,6 +9,7 @@ export default class EnvProvider {
         dbname: process.env.dbname as string,
         user: process.env.user as string,
         password: process.env.password as string,
-        host: process.env.host as string
+        host: process.env.host as string,
+        port: parseInt(process.env.port as string, 10)
     };
 }

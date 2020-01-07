@@ -18,14 +18,14 @@ export class StoreProvider {
         return this._store;
     }
 
-    private initStore(params: { dbname: string, user: string, password: string, host: string }): Sequelize {
+    private initStore(params: { dbname: string, user: string, password: string, host: string, port: number }): Sequelize {
         return new Sequelize(
             params.dbname,
             params.user,
             params.password,
             {
                 host: params.host,
-                port: 5432,
+                port: params.port,
                 protocol: 'postgres',
                 dialect: 'postgres',
                 models: [__dirname + '../../../../models/**/*.ts'],
