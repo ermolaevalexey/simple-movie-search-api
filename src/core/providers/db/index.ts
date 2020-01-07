@@ -20,14 +20,14 @@ export class StoreProvider {
 
     private initStore(params: { dbname: string, user: string, password: string, host: string, port: number }): Sequelize {
         console.log(JSON.stringify(params));
-        return new Sequelize(
-            params.dbname,
-            params.user,
-            params.password,
+        return new Sequelize(process.env.DATABASE_URL as string,
+            // params.dbname,
+            // params.user,
+            // params.password,
             {
-                host: params.host,
-                port: params.port,
-                protocol: 'postgres',
+                // host: params.host,
+                // port: params.port,
+                // protocol: 'postgres',
                 dialect: 'postgres',
                 models: [__dirname + '../../../../models/**/*.ts'],
                 repositoryMode: true,
