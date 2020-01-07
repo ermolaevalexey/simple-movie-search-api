@@ -5,11 +5,5 @@ import { Injectable } from '../../di';
 export default class EnvProvider {
     env = process.env.NODE_ENV as string;
     appPort = parseInt(process.env.PORT as string, 10);
-    store = {
-        dbname: process.env.dbname as string,
-        user: process.env.user as string,
-        password: process.env.password as string,
-        host: process.env.host as string,
-        port: parseInt(process.env.port as string, 10)
-    };
+    dbUrl = process.env.DATABASE_URL as string;
 }
