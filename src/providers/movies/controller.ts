@@ -60,10 +60,12 @@ export class MoviesController {
     };
 
     private uploadPoster(name: string, data: any): void {
+        const dir = path.resolve(__dirname + `../../../../static/posters/${name}.jpg`);
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, 0o744);
+        }
         const dt = fs.createReadStream((data['path']));
-        const file = fs.createWriteStream(
-            path.resolve(__dirname + `../../../../static/posters/${name}.jpg`)
-        );
+        const file = fs.createWriteStream(dir);
 
         dt.pipe(file);
     }
