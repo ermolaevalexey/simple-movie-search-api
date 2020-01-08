@@ -4,6 +4,8 @@ import { StoreProvider, TStoreProvider } from '../../core/providers/db';
 import Movie, { MovieParams } from '../../models/movie';
 
 
+export const TMoviesRepository = Symbol.for('MoviesRepository');
+
 @Injectable()
 export class MoviesRepository {
 

@@ -4,15 +4,17 @@ import * as path from 'path';
 import { Inject, Injectable } from '../../core/di';
 import { ContentTypeKey, Controller, DeleteRoute, GetRoute, PostRoute, PutRoute } from '../../core/routing/decorators';
 import { MovieParams } from '../../models/movie';
-import { MoviesRepository } from './repository';
+import { MoviesRepository, TMoviesRepository } from './repository';
 
+
+export const TMoviesController = Symbol.for('MoviesController');
 
 @Controller('/movies')
 @Injectable()
 export class MoviesController {
 
     constructor(
-        @Inject('MoviesRepository') private repository: MoviesRepository
+        @Inject(TMoviesRepository) private repository: MoviesRepository
     ) {}
 
     @GetRoute('/', ContentTypeKey.Json)

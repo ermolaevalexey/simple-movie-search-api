@@ -1,15 +1,17 @@
 import * as Koa from 'koa';
 import { Inject, Injectable } from '../../core/di';
 import { ContentTypeKey, Controller, GetRoute, PostRoute, PutRoute } from '../../core/routing/decorators';
-import { DirectorsRepository } from './repository';
+import { DirectorsRepository, TDirectorsRepository } from './repository';
 
+
+export const TDirectorsController = Symbol.for('DirectorsController');
 
 @Controller('/directors')
 @Injectable()
 export class DirectorsController {
 
     constructor(
-        @Inject('DirectorsRepository') private directorsRepository: DirectorsRepository
+        @Inject(TDirectorsRepository) private directorsRepository: DirectorsRepository
     ) {}
 
     @GetRoute('/', ContentTypeKey.Json)

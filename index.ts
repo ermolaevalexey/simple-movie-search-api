@@ -3,14 +3,14 @@ import * as Koa from 'koa';
 import './src/core/config/env';
 import { Container } from './src/core/di';
 import { LifeTime } from './src/core/di/container';
-import EnvProvider from './src/core/providers/env';
+import EnvProvider, { TEnvProvider } from './src/core/providers/env';
 import { AppProvider, TAppProvider } from './src/providers/app';
 import { StoreProvider, TStoreProvider } from './src/core/providers/db';
-import { DirectorsController } from './src/providers/directors/controller';
-import { DirectorsRepository } from './src/providers/directors/repository';
-import { MiddlewareProvider } from './src/providers/middleware';
-import { MoviesController } from './src/providers/movies/controller';
-import { MoviesRepository } from './src/providers/movies/repository';
+import { DirectorsController, TDirectorsController } from './src/providers/directors/controller';
+import { DirectorsRepository, TDirectorsRepository } from './src/providers/directors/repository';
+import { MiddlewareProvider, TMiddlewareProvider } from './src/providers/middleware';
+import { MoviesController, TMoviesController } from './src/providers/movies/controller';
+import { MoviesRepository, TMoviesRepository } from './src/providers/movies/repository';
 
 
 function bootstrap() {
@@ -28,12 +28,12 @@ function bootstrap() {
             lifeTime: LifeTime.Persistent
         },
         {
-            token: 'EnvProvider',
+            token: TEnvProvider,
             _value: new EnvProvider(),
             lifeTime: LifeTime.Persistent
         },
         {
-            token: 'MiddlewareProvider',
+            token: TMiddlewareProvider,
             _class: MiddlewareProvider,
             lifeTime: LifeTime.PerRequest
         },
@@ -48,22 +48,22 @@ function bootstrap() {
             lifeTime: LifeTime.Persistent
         },
         {
-            token: 'MoviesRepository',
+            token: TMoviesRepository,
             _class: MoviesRepository,
             lifeTime: LifeTime.PerRequest
         },
         {
-            token: 'MoviesController',
+            token: TMoviesController,
             _class: MoviesController,
             lifeTime: LifeTime.PerRequest
         },
         {
-            token: 'DirectorsRepository',
+            token: TDirectorsRepository,
             _class: DirectorsRepository,
             lifeTime: LifeTime.PerRequest
         },
         {
-            token: 'DirectorsController',
+            token: TDirectorsController,
             _class: DirectorsController,
             lifeTime: LifeTime.PerRequest
         }

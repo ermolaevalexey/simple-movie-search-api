@@ -3,6 +3,8 @@ import { Injectable } from '../../core/di';
 import { ContentTypeKey, MethodKey } from '../../core/routing/decorators';
 
 
+export const TMiddlewareProvider = Symbol.for('MiddlewareProvider');
+
 @Injectable()
 export class MiddlewareProvider {
 
