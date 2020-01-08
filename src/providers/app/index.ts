@@ -1,12 +1,16 @@
-import * as Router from '@koa/router';
+import * as path from 'path';
 import * as Koa from 'koa';
-import * as bodyParser from 'koa-bodyparser';
+import * as Router from '@koa/router';
+import * as koaCors from '@koa/cors';
+import * as koaBody from 'koa-body';
+import * as koaStatic from 'koa-static';
+import * as koaMount from 'koa-mount';
 import { Container, Inject, Injectable } from '../../core/di';
-import { RegistryItem } from '../../core/di/container';
-import EnvProvider from '../../core/providers/env';
+import { RegistryItem, TContainer } from '../../core/di/container';
+import EnvProvider, { TEnvProvider } from '../../core/providers/env';
 import { CONTROLLER_KEY, ROUTE_KEY, RouteMethodParams } from '../../core/routing/decorators';
 import { isClass } from '../../core/utils/di';
-import { MiddlewareProvider } from '../middleware';
+import { MiddlewareProvider, TMiddlewareProvider } from '../middleware';
 
 
 export const TAppProvider = Symbol.for('AppProvider');
@@ -17,9 +21,9 @@ export class AppProvider {
     constructor(
         @Inject('Koa') private server: Koa,
         @Inject('Router') private router: Router,
-        @Inject('EnvProvider') private envProvider: EnvProvider,
-        @Inject('Container') private container: Container,
-        @Inject('MiddlewareProvider') private middlewareProvider: MiddlewareProvider
+        @Inject(TEnvProvider) private envProvider: EnvProvider,
+        @Inject(TContainer) private container: Container,
+        @Inject(TMiddlewareProvider) private middlewareProvider: MiddlewareProvider
     ) {
         this.registerControllers();
     }
@@ -52,7 +56,17 @@ export class AppProvider {
 
     run() {
         this.server
-            .use(bodyParser())
+            .use(koaCors())
+            .use(koaMount('/posters/', koaStatic(
+                path.resolve(__dirname + '../../../../static/posters')
+            )))
+            .use(koaMount('/photos/', koaStatic(
+                path.resolve(__dirname + '../../../../static/photos')
+            )))
+            .use(koaBody({
+                multipart: true,
+                json: true
+            }))
             .use(this.router.routes())
             .use(this.router.allowedMethods())
             .listen(this.envProvider.appPort);

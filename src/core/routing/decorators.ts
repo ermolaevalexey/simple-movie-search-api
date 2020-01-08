@@ -14,7 +14,8 @@ export enum MethodKey {
 
 export enum ContentTypeKey {
     Json = 'application/json',
-    Html = 'text/html'
+    Html = 'text/html',
+    FormData = 'multipart/formdata'
 }
 
 export interface RouteParams {

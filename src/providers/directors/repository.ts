@@ -4,6 +4,8 @@ import { StoreProvider, TStoreProvider } from '../../core/providers/db';
 import Director, { DirectorParams } from '../../models/director';
 
 
+export const TDirectorsRepository = Symbol.for('DirectorsRepository');
+
 @Injectable()
 export class DirectorsRepository {
 

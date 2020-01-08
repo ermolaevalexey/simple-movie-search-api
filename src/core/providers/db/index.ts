@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize-typescript';
 import { Inject, Injectable } from '../../di';
-import EnvProvider from '../env';
+import EnvProvider, { TEnvProvider } from '../env';
 
 export const TStoreProvider = Symbol.for('StoreProvider');
 
@@ -9,7 +9,7 @@ export class StoreProvider {
     private _store: Sequelize;
 
     constructor(
-        @Inject('EnvProvider') private envProvider: EnvProvider
+        @Inject(TEnvProvider) private envProvider: EnvProvider
     ) {
         this._store = this.initStore(this.envProvider.dbUrl);
     }

@@ -1,6 +1,8 @@
 import '../../config/env';
 import { Injectable } from '../../di';
 
+export const TEnvProvider = Symbol.for('EnvProvider');
+
 @Injectable()
 export default class EnvProvider {
     env = process.env.NODE_ENV as string;
