@@ -54,14 +54,14 @@ export class DirectorsController {
     private uploadPhoto(name: string, data: any): void {
         const staticRoot = path.resolve(__dirname + `../../../../static`);
         const dir = path.resolve(staticRoot + `/photos`);
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir);
+        if (!fs.existsSync(staticRoot)) {
+            fs.mkdirSync(staticRoot, 0o744);
         }
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, 0o744);
         }
         const dt = fs.createReadStream((data['path']));
-        const file = fs.createWriteStream(path.resolve(dir + `${name}.jpg`));
+        const file = fs.createWriteStream(path.resolve(dir + `/${name}.jpg`));
 
         dt.pipe(file);
     }
