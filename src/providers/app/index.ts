@@ -1,6 +1,7 @@
 import * as path from 'path';
 import * as Koa from 'koa';
 import * as Router from '@koa/router';
+import * as koaCors from '@koa/cors';
 import * as koaBody from 'koa-body';
 import * as koaStatic from 'koa-static';
 import * as koaMount from 'koa-mount';
@@ -55,8 +56,12 @@ export class AppProvider {
 
     run() {
         this.server
+            .use(koaCors())
             .use(koaMount('/posters/', koaStatic(
                 path.resolve(__dirname + '../../../../static/posters')
+            )))
+            .use(koaMount('/photos/', koaStatic(
+                path.resolve(__dirname + '../../../../static/photos')
             )))
             .use(koaBody({
                 multipart: true,

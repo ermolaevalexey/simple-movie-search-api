@@ -34,7 +34,6 @@ export class MoviesController {
     createItem = async (ctx: Koa.Context, next: Function) => {
         ctx.state.data = await this.repository.createItem(ctx.request.body as Partial<MovieParams>);
         if (ctx.request.files && ctx.request.files.poster) {
-            console.log(ctx.request.files['poster']);
             this.uploadPoster(ctx.state.data.id, (ctx.request.files['poster'] as any));
         }
         await next();
@@ -46,22 +45,40 @@ export class MoviesController {
             ctx.params.id,
             ctx.request.body
         );
+        if (ctx.request.files && ctx.request.files.poster) {
+            this.uploadPoster(ctx.params.id, (ctx.request.files['poster'] as any));
+        }
         await next();
     };
 
     @DeleteRoute('/:id', ContentTypeKey.Json)
     deleteItem = async (ctx: Koa.Context, next: Function) => {
         await this.repository.deleteItem(ctx.params.id);
+        await this.deletePoster(ctx.params.id);
         ctx.state.data = { id: ctx.params.id };
         await next();
     };
 
-    private uploadPoster(name: string, data: any): any {
+    private uploadPoster(name: string, data: any): void {
         const dt = fs.createReadStream((data['path']));
         const file = fs.createWriteStream(
             path.resolve(__dirname + `../../../../static/posters/${name}.jpg`)
         );
 
         dt.pipe(file);
+    }
+
+    private async deletePoster(name: string): Promise<void> {
+        const filePath = path.resolve(__dirname + `../../../../static/posters/${name}.jpg`);
+
+        return new Promise((resolve, reject) => {
+            fs.unlink(filePath, (err) => {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    resolve();
+                }
+            });
+        });
     }
 }
