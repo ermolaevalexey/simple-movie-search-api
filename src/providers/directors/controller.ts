@@ -55,7 +55,7 @@ export class DirectorsController {
         const staticRoot = path.resolve(__dirname + `../../../../static`);
         const dir = path.resolve(staticRoot + `/photos`);
         if (!fs.existsSync(staticRoot)) {
-            fs.mkdirSync(staticRoot);
+            fs.mkdirSync(staticRoot, 0o744);
         }
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, 0o744);
