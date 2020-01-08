@@ -1,6 +1,6 @@
 {
   "name": "simple-movie-search-api",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A simple movie search API for angular course",
   "main": "index.ts",
   "scripts": {
