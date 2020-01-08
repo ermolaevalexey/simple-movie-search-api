@@ -35,13 +35,15 @@ export class RegistryItem {
     public lifeTime!: LifeTime;
 }
 
+export const TContainer = Symbol.for('Container');
+
 export class Container {
 
     private _registry: Map<any, RegistryItem | any> = new Map();
 
     constructor() {
         this.register({
-            token: 'Container',
+            token: TContainer,
             _value: this
         });
     }

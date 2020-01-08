@@ -3,4 +3,5 @@
 .env
 *.hcl
 dist
+static
 node_modules

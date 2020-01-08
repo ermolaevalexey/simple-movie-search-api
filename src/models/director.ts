@@ -23,6 +23,7 @@ export interface DirectorParams {
     id: string;
     name: string;
     movies: Array<string>;
+    photo?: File;
 }
 
 export interface DirectorUpdateParams {
