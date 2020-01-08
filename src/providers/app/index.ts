@@ -1,6 +1,9 @@
+import * as path from 'path';
 import * as Router from '@koa/router';
 import * as Koa from 'koa';
 import * as koaBody from 'koa-body';
+import * as koaStatic from 'koa-static';
+import * as koaMount from 'koa-mount';
 import { Container, Inject, Injectable } from '../../core/di';
 import { RegistryItem } from '../../core/di/container';
 import EnvProvider from '../../core/providers/env';
@@ -52,6 +55,9 @@ export class AppProvider {
 
     run() {
         this.server
+            .use(koaMount('/posters/', koaStatic(
+                path.resolve(__dirname + '../../../../static/posters')
+            )))
             .use(koaBody({
                 multipart: true,
                 json: true

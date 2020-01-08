@@ -32,8 +32,8 @@ export class MoviesController {
     createItem = async (ctx: Koa.Context, next: Function) => {
         ctx.state.data = await this.repository.createItem(ctx.request.body as Partial<MovieParams>);
         if (ctx.request.files && ctx.request.files.poster) {
-            // console.log((ctx.request.files['poster']).);
-            this.uploadPoster(ctx.state.data.id, (ctx.request.files['poster'] as any)![0]);
+            console.log(ctx.request.files['poster']);
+            this.uploadPoster(ctx.state.data.id, (ctx.request.files['poster'] as any));
         }
         await next();
     };
@@ -54,8 +54,8 @@ export class MoviesController {
         await next();
     };
 
-    private uploadPoster(name: string, data: File): any {
-        const dt = fs.createReadStream(data.name);
+    private uploadPoster(name: string, data: any): any {
+        const dt = fs.createReadStream((data['path']));
         const file = fs.createWriteStream(
             path.resolve(__dirname + `../../../../static/posters/${name}.jpg`)
         );
