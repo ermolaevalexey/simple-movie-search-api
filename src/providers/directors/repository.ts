@@ -31,11 +31,17 @@ export class DirectorsRepository {
     }
 
     async updateItem(id: string, params: Partial<DirectorParams>): Promise<boolean> {
+        const fields = Object.keys(params).filter(f => Boolean(params[f as keyof DirectorParams]));
+
+        if (!fields.length) {
+            return true;
+        }
+
         const [ updated ] = await this.directorsRepository.update(
             params,
             {
                 where: { id },
-                fields: Object.keys(params)
+                fields
             }
         );
 
