@@ -30,7 +30,7 @@ export class MoviesRepository {
     }
 
     async updateItem(id: string, params: Partial<MovieParams>): Promise<boolean> {
-        const fields = Object.keys(params).filter(f => Boolean(params[f as keyof MovieParams]));;
+        const fields = Object.keys(params).filter(f => Boolean(params[f as keyof MovieParams]));
 
         if (!fields.length) {
             return true;
