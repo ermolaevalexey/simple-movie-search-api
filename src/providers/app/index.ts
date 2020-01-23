@@ -57,10 +57,10 @@ export class AppProvider {
     run() {
         this.server
             .use(koaCors())
-            .use(koaMount('/posters/', koaStatic(
+            .use(koaMount('/posters1/', koaStatic(
                 path.resolve(__dirname + '../../../../static/posters')
             )))
-            .use(koaMount('/photos/', koaStatic(
+            .use(koaMount('/photos1/', koaStatic(
                 path.resolve(__dirname + '../../../../static/photos')
             )))
             .use(koaBody({

@@ -2,6 +2,7 @@ import * as Koa from 'koa';
 import * as fs from 'fs';
 import * as path from 'path';
 import { Inject, Injectable } from '../../core/di';
+import { StaticStorageProvider, TStaticStorageProvider } from '../../core/providers/static-storage';
 import { ContentTypeKey, Controller, DeleteRoute, GetRoute, PostRoute, PutRoute } from '../../core/routing/decorators';
 import { MovieParams } from '../../models/movie';
 import { MoviesRepository, TMoviesRepository } from './repository';
@@ -14,7 +15,8 @@ export const TMoviesController = Symbol.for('MoviesController');
 export class MoviesController {
 
     constructor(
-        @Inject(TMoviesRepository) private repository: MoviesRepository
+        @Inject(TMoviesRepository) private repository: MoviesRepository,
+        @Inject(TStaticStorageProvider) private staticStorage: StaticStorageProvider
     ) {}
 
     @GetRoute('/', ContentTypeKey.Json)
@@ -47,6 +49,7 @@ export class MoviesController {
         );
         if (ctx.request.files && ctx.request.files.poster) {
             this.uploadPoster(ctx.params.id, (ctx.request.files['poster'] as any));
+            this.uploadPosterNew(ctx.params.id, (ctx.request.files['poster'] as any));
         }
         await next();
     };
@@ -59,7 +62,12 @@ export class MoviesController {
         await next();
     };
 
+    private uploadPosterNew(name: string, data: any): void {
+        this.staticStorage.uploadFile(name, 'posters', data);
+    }
+
     private uploadPoster(name: string, data: any): void {
+        console.log(data);
         const staticRoot = path.resolve(__dirname + `../../../../static`);
         const dir = path.resolve(staticRoot + `/posters`);
 
