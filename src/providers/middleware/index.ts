@@ -10,7 +10,7 @@ export class MiddlewareProvider {
 
     setContentType(type: ContentTypeKey): Koa.Middleware {
         return async (ctx: Koa.Context, next: Function) => {
-            ctx.type = type;
+            // ctx.type = type;
             await next();
         }
     }
@@ -43,7 +43,12 @@ export class MiddlewareProvider {
 
     sendData(): Koa.Middleware {
         return async (ctx: Koa.Context, next: Function) => {
-            ctx.body = this.transformData((ctx.type as ContentTypeKey), ctx.state.data);
+            if (!!ctx.state.data.ext) {
+                ctx.type = ctx.state.data.ext;
+                ctx.body = ctx.state.data.source;
+            } else {
+                ctx.body = this.transformData((ctx.type as ContentTypeKey), ctx.state.data);
+            }
         }
     }
 
