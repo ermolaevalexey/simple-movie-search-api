@@ -10,7 +10,7 @@ export class MiddlewareProvider {
 
     setContentType(type: ContentTypeKey): Koa.Middleware {
         return async (ctx: Koa.Context, next: Function) => {
-            // ctx.type = type;
+            ctx.type = type;
             await next();
         }
     }
