@@ -8,8 +8,6 @@ export const TStaticStorageProvider = Symbol.for('StaticStorageProvider');
 
 @Injectable()
 export class StaticStorageProvider {
-    // private connection: Connection | null = null;
-    // private gridFs: Grid.Grid | null = null;
 
     private db!: Db;
 
@@ -43,7 +41,6 @@ export class StaticStorageProvider {
     }
 
     async getFile(fileName: string, bucketName: string): Promise<{ source: GridFSBucketReadStream | null, ext: string, found: boolean }> {
-        console.log('downloading file from bucket...');
         const bucket = new GridFSBucket(this.db, { bucketName });
         try {
             const fileObj = await this.db
@@ -62,7 +59,6 @@ export class StaticStorageProvider {
     }
 
     async deleteFile(fileName: string, bucketName: string): Promise<void> {
-        console.log('deleting file from bucket...');
         const bucket = new GridFSBucket(this.db, { bucketName });
         try {
             const fileObj = await this.db
