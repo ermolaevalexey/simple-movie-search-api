@@ -16,10 +16,15 @@ export class StaticController {
 
     @GetRoute('/posters/:filename', ContentTypeKey.Image)
     getMoviePoster = async (ctx: Koa.Context, next: Function) => {
-        // console.log(ctx);
         const data = await this.staticProvider.getFile(ctx.params.filename, 'posters');
         ctx.state.data = data;
-        // stream.pipe(ctx.state.data); // = '<h1>Foo</h1>'
+        await next();
+    };
+
+    @GetRoute('/photos/:filename', ContentTypeKey.Image)
+    getDirectorPhoto = async (ctx: Koa.Context, next: Function) => {
+        const data = await this.staticProvider.getFile(ctx.params.filename, 'photos');
+        ctx.state.data = data;
         await next();
     };
 }

@@ -4,8 +4,8 @@ import * as path from 'path';
 import { Inject, Injectable } from '../../core/di';
 import { StaticStorageProvider, TStaticStorageProvider } from '../../core/providers/static-storage';
 import { ContentTypeKey, Controller, DeleteRoute, GetRoute, PostRoute, PutRoute } from '../../core/routing/decorators';
-import { MovieParams } from '../../models/movie';
 import { MoviesRepository, TMoviesRepository } from './repository';
+import { MoviesContext } from './request';
 
 
 export const TMoviesController = Symbol.for('MoviesController');
@@ -33,23 +33,22 @@ export class MoviesController {
     };
 
     @PostRoute('/', ContentTypeKey.Json)
-    createItem = async (ctx: Koa.Context, next: Function) => {
-        ctx.state.data = await this.repository.createItem(ctx.request.body as Partial<MovieParams>);
+    createItem = async (ctx: MoviesContext, next: Function) => {
+        ctx.state.data = await this.repository.createItem(ctx.request.body);
         if (ctx.request.files && ctx.request.files.poster) {
-            this.uploadPoster(ctx.state.data.id, (ctx.request.files['poster'] as any));
+            this.uploadPoster(ctx.state.data.id, ctx.request.files.poster);
         }
         await next();
     };
 
     @PutRoute('/:id', ContentTypeKey.Json)
-    updateItem = async (ctx: Koa.Context, next: Function) => {
+    updateItem = async (ctx: MoviesContext, next: Function) => {
         ctx.state.data = await this.repository.updateItem(
             ctx.params.id,
-            ctx.request.body
+            ctx.request.body!
         );
         if (ctx.request.files && ctx.request.files.poster) {
-            this.uploadPoster(ctx.params.id, (ctx.request.files['poster'] as any));
-            this.uploadPosterNew(ctx.params.id, (ctx.request.files['poster'] as any));
+            this.uploadPoster(ctx.params.id, ctx.request.files.poster);
         }
         await next();
     };
@@ -62,39 +61,11 @@ export class MoviesController {
         await next();
     };
 
-    private uploadPosterNew(name: string, data: any): void {
+    private uploadPoster(name: string, data: any): void {
         this.staticStorage.uploadFile(name, 'posters', data);
     }
 
-    private uploadPoster(name: string, data: any): void {
-        console.log(data);
-        const staticRoot = path.resolve(__dirname + `../../../../static`);
-        const dir = path.resolve(staticRoot + `/posters`);
-
-        if (!fs.existsSync(staticRoot)) {
-            fs.mkdirSync(staticRoot, 0o744);
-        }
-
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, 0o744);
-        }
-        const dt = fs.createReadStream((data['path']));
-        const file = fs.createWriteStream(path.resolve(dir + `/${name}.jpg`));
-
-        dt.pipe(file);
-    }
-
     private async deletePoster(name: string): Promise<void> {
-        const filePath = path.resolve(__dirname + `../../../../static/posters/${name}.jpg`);
-
-        return new Promise((resolve, reject) => {
-            fs.unlink(filePath, (err) => {
-                if (err) {
-                    reject(err.message);
-                } else {
-                    resolve();
-                }
-            });
-        });
+        await this.staticStorage.deleteFile(name, 'posters');
     }
 }

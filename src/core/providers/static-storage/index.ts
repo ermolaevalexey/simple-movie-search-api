@@ -15,21 +15,6 @@ export class StaticStorageProvider {
 
     constructor(@Inject(TEnvProvider) private envProvider: EnvProvider) {
         this.init().then(() => console.log(this.db));
-        // this.connection = createConnection(
-        //     this.envProvider.mongoDbUrl,
-        //     {
-        //         dbName: this.envProvider.mongoDbName,
-        //         user: this.envProvider.mongoDbUser,
-        //         pass: this.envProvider.mongoDbPassword,
-        //         keepAlive: true
-        //     }
-        // );
-        //
-        //
-        //
-        // this.connection.once('open', () => {
-        //     this.gridFs = Grid(this.connection!.db, mongo)
-        // })
     }
 
     async init(): Promise<void> {
@@ -47,8 +32,7 @@ export class StaticStorageProvider {
         }
     }
 
-    uploadFile(fileName: string, bucketName: string, data: any): any {
-        console.log('uploading file to bucket...');
+    uploadFile(fileName: string, bucketName: string, data: any): void {
         const bucket = new GridFSBucket(this.db, { bucketName });
         const source = fs.createReadStream(data.path);
         const target = bucket.openUploadStream(fileName, {
@@ -58,18 +42,39 @@ export class StaticStorageProvider {
         source.pipe(target);
     }
 
-    async getFile(fileName: string, bucketName: string): Promise<{ source: GridFSBucketReadStream, ext: string }> {
+    async getFile(fileName: string, bucketName: string): Promise<{ source: GridFSBucketReadStream | null, ext: string, found: boolean }> {
         console.log('downloading file from bucket...');
         const bucket = new GridFSBucket(this.db, { bucketName });
-        const fileObj = await this.db.collection('posters.files').findOne({ filename: fileName });
-        console.log(fileObj);
-        const file = bucket.find({ filename: fileName });
-        // const source = bucket.openDownloadStreamByName(fileName);
-        console.log(file);
-        const source = bucket.openDownloadStreamByName(fileName);
-        console.log(source);
-        return { source, ext: fileObj.contentType };
-        // const file = await this.gridFs!.files.findOne({ filename: fileName });
-        // return file;
+        try {
+            const fileObj = await this.db
+                .collection(`${bucketName}.files`)
+                .findOne({ filename: fileName });
+
+            const source = bucket.openDownloadStreamByName(fileName);
+            return { source, ext: fileObj.contentType, found: true };
+        } catch (err) {
+            return {
+                source: null,
+                ext: '',
+                found: false
+            };
+        }
+    }
+
+    async deleteFile(fileName: string, bucketName: string): Promise<void> {
+        console.log('deleting file from bucket...');
+        const bucket = new GridFSBucket(this.db, { bucketName });
+        try {
+            const fileObj = await this.db
+                .collection(`${bucketName}.files`)
+                .findOne({ filename: fileName });
+
+            bucket.delete(fileObj._id, (err) => {
+                throw err;
+            });
+        } catch (err) {
+            console.error(err);
+            return;
+        }
     }
 }

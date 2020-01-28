@@ -43,8 +43,13 @@ export class MiddlewareProvider {
 
     sendData(): Koa.Middleware {
         return async (ctx: Koa.Context, next: Function) => {
-            if (!!ctx.state.data.ext) {
-                ctx.type = ctx.state.data.ext;
+            if (typeof ctx.state.data.ext !== 'undefined') {
+                if (!ctx.state.data.found) {
+                    ctx.status = 404;
+                }
+                console.log(ctx.params);
+                console.log(ctx.state.data);
+                ctx.type = ctx.state.data.ext || ContentTypeKey.Html;
                 ctx.body = ctx.state.data.source;
             } else {
                 ctx.body = this.transformData((ctx.type as ContentTypeKey), ctx.state.data);
