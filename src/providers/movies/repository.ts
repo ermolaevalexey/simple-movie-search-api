@@ -1,7 +1,8 @@
 import { Sequelize } from 'sequelize-typescript';
 import { Inject, Injectable } from '../../core/di';
 import { StoreProvider, TStoreProvider } from '../../core/providers/db';
-import Movie, { MovieParams } from '../../models/movie';
+import Movie from '../../models/movie';
+import { MovieParams } from './request';
 
 
 export const TMoviesRepository = Symbol.for('MoviesRepository');
