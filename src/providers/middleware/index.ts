@@ -43,16 +43,14 @@ export class MiddlewareProvider {
 
     sendData(): Koa.Middleware {
         return async (ctx: Koa.Context, next: Function) => {
-            if (typeof ctx.state.data.ext !== 'undefined') {
-                if (!ctx.state.data.found) {
+            if (ctx.type !== ContentTypeKey.Image) {
+                ctx.body = this.transformData((ctx.type as ContentTypeKey), ctx.state.data);
+            } else {
+                if (!ctx.state.data || !ctx.state.data.found) {
                     ctx.status = 404;
                 }
-                console.log(ctx.params);
-                console.log(ctx.state.data);
-                ctx.type = ctx.state.data.ext || ContentTypeKey.Html;
-                ctx.body = ctx.state.data.source;
-            } else {
-                ctx.body = this.transformData((ctx.type as ContentTypeKey), ctx.state.data);
+                ctx.type = (ctx.state.data && ctx.state.data.ext) || ContentTypeKey.Html;
+                ctx.body = (ctx.state.data && ctx.state.data.source) || null;
             }
         }
     }
@@ -64,7 +62,7 @@ export class MiddlewareProvider {
             } catch (err) {
                 ctx.status = 502;
                 ctx.headers['Content-Type'] = 'application/json';
-                ctx.body = JSON.stringify({ error: err.message });
+                ctx.body = JSON.stringify({ error: err });
             }
         }
     }
