@@ -3,14 +3,16 @@ import * as Koa from 'koa';
 import './src/core/config/env';
 import { Container } from './src/core/di';
 import { LifeTime } from './src/core/di/container';
-import EnvProvider, { TEnvProvider } from './src/core/providers/env';
-import { AppProvider, TAppProvider } from './src/providers/app';
 import { StoreProvider, TStoreProvider } from './src/core/providers/db';
+import EnvProvider, { TEnvProvider } from './src/core/providers/env';
+import { StaticStorageProvider, TStaticStorageProvider } from './src/core/providers/static-storage';
+import { AppProvider, TAppProvider } from './src/providers/app';
 import { DirectorsController, TDirectorsController } from './src/providers/directors/controller';
 import { DirectorsRepository, TDirectorsRepository } from './src/providers/directors/repository';
 import { MiddlewareProvider, TMiddlewareProvider } from './src/providers/middleware';
 import { MoviesController, TMoviesController } from './src/providers/movies/controller';
 import { MoviesRepository, TMoviesRepository } from './src/providers/movies/repository';
+import { StaticController, TStaticController } from './src/providers/static/controller';
 
 
 function bootstrap() {
@@ -32,20 +34,26 @@ function bootstrap() {
             _value: new EnvProvider(),
             lifeTime: LifeTime.Persistent
         },
-        {
-            token: TMiddlewareProvider,
-            _class: MiddlewareProvider,
-            lifeTime: LifeTime.PerRequest
-        },
+
         {
             token: TStoreProvider,
             _class: StoreProvider,
             lifeTime: LifeTime.Persistent
         },
         {
+            token: TStaticStorageProvider,
+            _class: StaticStorageProvider,
+            lifeTime: LifeTime.Persistent
+        },
+        {
             token: TAppProvider,
             _class: AppProvider,
             lifeTime: LifeTime.Persistent
+        },
+        {
+            token: TMiddlewareProvider,
+            _class: MiddlewareProvider,
+            lifeTime: LifeTime.PerRequest
         },
         {
             token: TMoviesRepository,
@@ -65,6 +73,11 @@ function bootstrap() {
         {
             token: TDirectorsController,
             _class: DirectorsController,
+            lifeTime: LifeTime.PerRequest
+        },
+        {
+            token: TStaticController,
+            _class: StaticController,
             lifeTime: LifeTime.PerRequest
         }
     ]);

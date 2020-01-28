@@ -1,7 +1,8 @@
 import { Sequelize } from 'sequelize-typescript';
 import { Inject, Injectable } from '../../core/di';
 import { StoreProvider, TStoreProvider } from '../../core/providers/db';
-import Director, { DirectorParams } from '../../models/director';
+import Director from '../../models/director';
+import { DirectorParams } from './request';
 
 
 export const TDirectorsRepository = Symbol.for('DirectorsRepository');

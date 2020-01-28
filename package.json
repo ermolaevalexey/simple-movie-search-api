@@ -1,13 +1,13 @@
 {
   "name": "simple-movie-search-api",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A simple movie search API for angular course",
   "main": "index.ts",
   "scripts": {
     "start": "nodemon",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Alexey Ermolaev",
   "license": "ISC",
   "dependencies": {
     "@koa/cors": "^2.2.3",
@@ -18,13 +18,15 @@
     "@types/koa-static": "^4.0.1",
     "@types/koa__cors": "^3.0.0",
     "@types/koa__router": "^8.0.1",
-    "@types/node": "12.12.6",
+    "@types/mongodb": "^3.3.14",
+    "@types/node": "^12.12.6",
     "dotenv": "^8.2.0",
     "koa": "2.11.0",
     "koa-body": "^4.1.1",
     "koa-bodyparser": "^4.2.1",
     "koa-mount": "^4.0.0",
     "koa-static": "^5.0.0",
+    "mongodb": "^3.5.2",
     "nodemon": "^2.0.2",
     "pg": "7.14.0",
     "pg-hstore": "2.3.3",

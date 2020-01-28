@@ -1,10 +1,9 @@
-import * as fs from "fs";
 import * as Koa from 'koa';
-import * as path from "path";
 import { Inject, Injectable } from '../../core/di';
+import { StaticStorageProvider, TStaticStorageProvider } from '../../core/providers/static-storage';
 import { ContentTypeKey, Controller, GetRoute, PostRoute, PutRoute } from '../../core/routing/decorators';
-import { DirectorParams } from '../../models/director';
 import { DirectorsRepository, TDirectorsRepository } from './repository';
+import { DirectorsContext } from './request';
 
 
 export const TDirectorsController = Symbol.for('DirectorsController');
@@ -14,7 +13,8 @@ export const TDirectorsController = Symbol.for('DirectorsController');
 export class DirectorsController {
 
     constructor(
-        @Inject(TDirectorsRepository) private directorsRepository: DirectorsRepository
+        @Inject(TDirectorsRepository) private directorsRepository: DirectorsRepository,
+        @Inject(TStaticStorageProvider) private staticStorage: StaticStorageProvider
     ) {}
 
     @GetRoute('/', ContentTypeKey.Json)
@@ -31,52 +31,29 @@ export class DirectorsController {
     };
 
     @PostRoute('/', ContentTypeKey.Json)
-    createItem = async (ctx: Koa.Context, next: Function) => {
-        ctx.state.data = await this.directorsRepository.createItem(ctx.request.body as Partial<DirectorParams>);
+    createItem = async (ctx: DirectorsContext, next: Function) => {
+        ctx.state.data = await this.directorsRepository.createItem(ctx.request.body);
+
         if (ctx.request.files && ctx.request.files.photo) {
-            this.uploadPhoto(ctx.state.data.id, (ctx.request.files['photo'] as any));
+            this.uploadPhoto(ctx.state.data.id, ctx.request.files.photo);
         }
         await next();
     };
 
     @PutRoute('/:id', ContentTypeKey.Json)
-    updateItem = async (ctx: Koa.Context, next: Function) => {
+    updateItem = async (ctx: DirectorsContext, next: Function) => {
         ctx.state.data = await this.directorsRepository.updateItem(
             ctx.params.id,
             ctx.request.body
         );
+
         if (ctx.request.files && ctx.request.files.photo) {
-            this.uploadPhoto(ctx.params.id, (ctx.request.files['photo'] as any));
+            this.uploadPhoto(ctx.params.id, ctx.request.files.photo);
         }
         await next();
     };
 
     private uploadPhoto(name: string, data: any): void {
-        const staticRoot = path.resolve(__dirname + `../../../../static`);
-        const dir = path.resolve(staticRoot + `/photos`);
-        if (!fs.existsSync(staticRoot)) {
-            fs.mkdirSync(staticRoot, 0o744);
-        }
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, 0o744);
-        }
-        const dt = fs.createReadStream((data['path']));
-        const file = fs.createWriteStream(path.resolve(dir + `/${name}.jpg`));
-
-        dt.pipe(file);
-    }
-
-    private async deletePhoto(name: string): Promise<void> {
-        const filePath = path.resolve(__dirname + `../../../../static/photos/${name}.jpg`);
-
-        return new Promise((resolve, reject) => {
-            fs.unlink(filePath, (err) => {
-                if (err) {
-                    reject(err.message);
-                } else {
-                    resolve();
-                }
-            });
-        });
+        this.staticStorage.uploadFile(name, 'photos', data);
     }
 }
