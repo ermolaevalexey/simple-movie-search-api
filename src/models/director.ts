@@ -10,7 +10,7 @@ export default class Director extends Model<Director> {
     @Column({ type: DataType.UUIDV4, primaryKey: true })
     id: string = this.id;
 
-    @Column({ type: DataType.STRING, allowNull: false })
+    @Column({ type: DataType.STRING, allowNull: true })
     // @ts-ignore
     name: string = this.name;
 

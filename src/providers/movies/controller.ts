@@ -28,6 +28,7 @@ export class MoviesController {
     @GetRoute('/:id', ContentTypeKey.Json)
     getItem = async (ctx: Koa.Context, next: Function) => {
         const movie = await this.repository.getItem(ctx.params.id);
+
         ctx.state.data = movie;
         await next();
     };
