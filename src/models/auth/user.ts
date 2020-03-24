@@ -28,5 +28,5 @@ export default class User extends Model<User> {
 
     @Column({ type: DataType.ARRAY(DataType.UUIDV4) })
     // @ts-ignore
-    favouriteMovies: Array<string> = this.favouriteMovies;
+    favourite_movies: Array<string> = this.favouriteMovies;
 }

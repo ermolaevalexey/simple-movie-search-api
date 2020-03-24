@@ -7,6 +7,8 @@ import { StoreProvider, TStoreProvider } from './src/core/providers/db';
 import EnvProvider, { TEnvProvider } from './src/core/providers/env';
 import { StaticStorageProvider, TStaticStorageProvider } from './src/core/providers/static-storage';
 import { AppProvider, TAppProvider } from './src/providers/app';
+import { TUsersController, UsersController } from './src/providers/auth/controller';
+import { TUsersRepository, UsersRepository } from './src/providers/auth/repository';
 import { DirectorsController, TDirectorsController } from './src/providers/directors/controller';
 import { DirectorsRepository, TDirectorsRepository } from './src/providers/directors/repository';
 import { MiddlewareProvider, TMiddlewareProvider } from './src/providers/middleware';
@@ -78,6 +80,16 @@ function bootstrap() {
         {
             token: TStaticController,
             _class: StaticController,
+            lifeTime: LifeTime.PerRequest
+        },
+        {
+            token: TUsersRepository,
+            _class: UsersRepository,
+            lifeTime: LifeTime.PerRequest
+        },
+        {
+            token: TUsersController,
+            _class: UsersController,
             lifeTime: LifeTime.PerRequest
         }
     ]);

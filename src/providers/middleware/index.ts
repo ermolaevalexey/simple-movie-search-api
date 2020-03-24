@@ -1,5 +1,7 @@
 import * as Koa from 'koa';
-import { Injectable } from '../../core/di';
+import * as jwt from 'jsonwebtoken';
+import { Inject, Injectable } from '../../core/di';
+import EnvProvider, { TEnvProvider } from '../../core/providers/env';
 import { ContentTypeKey, MethodKey } from '../../core/routing/decorators';
 
 
@@ -7,6 +9,11 @@ export const TMiddlewareProvider = Symbol.for('MiddlewareProvider');
 
 @Injectable()
 export class MiddlewareProvider {
+
+    constructor(
+        @Inject(TEnvProvider) private envProvider: EnvProvider
+    ) {}
+
 
     setContentType(type: ContentTypeKey): Koa.Middleware {
         return async (ctx: Koa.Context, next: Function) => {
@@ -60,9 +67,49 @@ export class MiddlewareProvider {
             try {
                 await next();
             } catch (err) {
+                console.error(err);
                 ctx.status = 502;
                 ctx.headers['Content-Type'] = 'application/json';
                 ctx.body = JSON.stringify({ error: err });
+            }
+        }
+    }
+
+    verifyToken(): Koa.Middleware {
+        return async (ctx: Koa.Context, next: Function) => {
+            try {
+                const authHeader = ctx.headers.authorization;
+
+                const token = (authHeader || '').replace('Bearer ', '');
+                if (!token) {
+                    ctx.status = 401;
+                    ctx.body = { error: 'No way!' };
+                    return;
+                }
+
+                const payload = await jwt.verify(token, this.envProvider.authSecret);
+                console.log(payload);
+                if ((payload as any).type !== 'access') {
+                    ctx.status = 401;
+                    ctx.body = { error: 'Invalid token' };
+                } else {
+                    console.log('verified'.toUpperCase())
+                    await next();
+                }
+
+            } catch (err) {
+                if (err instanceof jwt.TokenExpiredError) {
+                    ctx.status = 401;
+                    ctx.body = { error: 'Token expired!' };
+                }
+
+                if (err instanceof jwt.JsonWebTokenError) {
+                    ctx.status = 401;
+                    ctx.body = { error: 'Invalid token' };
+                }
+
+
+                //throw err;
             }
         }
     }
