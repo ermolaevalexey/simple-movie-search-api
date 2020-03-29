@@ -23,6 +23,7 @@ export interface RouteParams {
     path: string;
     method: MethodKey;
     contentType: ContentTypeKey;
+    needAuth?: boolean;
 }
 
 export interface RouteMethodParams extends RouteParams {
@@ -54,35 +55,39 @@ export function Route(params: RouteParams) {
     }
 }
 
-export function GetRoute(path: string, contentType: ContentTypeKey) {
+export function GetRoute(path: string, contentType: ContentTypeKey, needAuth = false) {
     return Route({
         path,
         method: MethodKey.Get,
-        contentType
+        contentType,
+        needAuth
     });
 }
 
-export function PostRoute(path: string, contentType: ContentTypeKey) {
+export function PostRoute(path: string, contentType: ContentTypeKey, needAuth = true) {
     return Route({
         path,
         method: MethodKey.Post,
-        contentType
+        contentType,
+        needAuth
     });
 }
 
-export function PutRoute(path: string, contentType: ContentTypeKey) {
+export function PutRoute(path: string, contentType: ContentTypeKey, needAuth = true) {
     return Route({
         path,
         method: MethodKey.Put,
-        contentType
+        contentType,
+        needAuth
     });
 }
 
-export function DeleteRoute(path: string, contentType: ContentTypeKey) {
+export function DeleteRoute(path: string, contentType: ContentTypeKey, needAuth = true) {
     return Route({
         path,
         method: MethodKey.Delete,
-        contentType
+        contentType,
+        needAuth
     });
 }
 

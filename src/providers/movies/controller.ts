@@ -1,6 +1,4 @@
 import * as Koa from 'koa';
-import * as fs from 'fs';
-import * as path from 'path';
 import { Inject, Injectable } from '../../core/di';
 import { StaticStorageProvider, TStaticStorageProvider } from '../../core/providers/static-storage';
 import { ContentTypeKey, Controller, DeleteRoute, GetRoute, PostRoute, PutRoute } from '../../core/routing/decorators';
