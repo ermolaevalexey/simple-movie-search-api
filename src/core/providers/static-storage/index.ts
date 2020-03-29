@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { MongoClient, Db, GridFSBucket, connect, GridFSBucketReadStream } from 'mongodb';
+import { Db, GridFSBucket, connect, GridFSBucketReadStream } from 'mongodb';
 import { Inject, Injectable } from '../../di';
 import EnvProvider, { TEnvProvider } from '../env';
 

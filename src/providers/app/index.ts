@@ -41,14 +41,16 @@ export class AppProvider {
             const routes: Array<RouteMethodParams> = Reflect.getOwnMetadata(ROUTE_KEY, (controller as any).constructor);
 
             routes.forEach(route => {
-                this.router[route.method](
-                    baseControllerPath + route.path,
+                const mws = [
                     this.middlewareProvider.handleError(),
+                    route.needAuth ? this.middlewareProvider.verifyToken() : undefined,
                     (controller as any)[route.handler],
                     this.middlewareProvider.setContentType(route.contentType),
                     this.middlewareProvider.setStatus(route.method),
                     this.middlewareProvider.sendData(),
-                );
+                ];
+
+                this.router[route.method]( baseControllerPath + route.path, ...mws.filter(Boolean));
             });
         });
     }
