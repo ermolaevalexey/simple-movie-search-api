@@ -1,33 +1,35 @@
 import { Sequelize } from 'sequelize-typescript';
-import { Inject, Injectable } from '../../di';
 import EnvProvider, { TEnvProvider } from '../env';
+import { Inject, Injectable } from '../../di';
 
 export const TStoreProvider = Symbol.for('StoreProvider');
 
 @Injectable()
 export class StoreProvider {
-    private _store: Sequelize;
+  private _store: Sequelize;
 
-    constructor(
-        @Inject(TEnvProvider) private envProvider: EnvProvider
-    ) {
-        this._store = this.initStore(this.envProvider.dbUrl);
-    }
+  constructor(
+    @Inject(TEnvProvider) private envProvider: EnvProvider
+  ) {
+    // eslint-disable-next-line no-underscore-dangle
+    this._store = this.initStore(this.envProvider.dbUrl);
+  }
 
-    get store(): Sequelize {
-        return this._store;
-    }
+  get store(): Sequelize {
+    // eslint-disable-next-line no-underscore-dangle
+    return this._store;
+  }
 
-    private initStore(dbUrl: string): Sequelize {
-        return new Sequelize(dbUrl,
-            {
-                dialect: 'postgres',
-                models: [__dirname + '../../../../models/**/*.ts'],
-                repositoryMode: true,
-                logging: this.envProvider.env === 'production'
-                    ? undefined
-                    : console.log
-            }
-        );
-    }
+  private initStore(dbUrl: string): Sequelize {
+    return new Sequelize(dbUrl,
+      {
+        dialect: 'postgres',
+        logging: this.envProvider.env === 'production'
+          ? undefined
+          : console.log,
+        models: [__dirname + '../../../../models/**/*.ts'],
+        repositoryMode: true
+      }
+    );
+  }
 }
