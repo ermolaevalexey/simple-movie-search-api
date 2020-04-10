@@ -24,6 +24,8 @@
     "@types/node": "^12.12.6",
     "bcrypt": "^4.0.1",
     "dotenv": "^8.2.0",
+    "eslint-plugin-typescript": "^0.14.0",
+    "jest": "^25.2.4",
     "jsonwebtoken": "^8.5.1",
     "koa": "2.11.0",
     "koa-body": "^4.1.1",
@@ -37,10 +39,18 @@
     "reflect-metadata": "^0.1.13",
     "sequelize": "^5.21.3",
     "sequelize-typescript": "^1.1.0",
+    "ts-jest": "^25.2.1",
     "ts-node": "8.4.1",
     "typescript": "3.7.2"
   },
   "devDependencies": {
-    "tslint": "^5.20.1"
+    "@typescript-eslint/eslint-plugin": "^2.25.0",
+    "@typescript-eslint/eslint-plugin-tslint": "^2.25.0",
+    "@typescript-eslint/parser": "^2.25.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-jest": "^23.8.2",
+    "eslint-plugin-sort-keys-fix": "^1.1.0",
+    "eslint-plugin-unused-imports": "^0.1.2",
+    "tslint": "^6.1.0"
   }
 }
